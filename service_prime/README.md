@@ -1,5 +1,6 @@
 Thank you for taking time to read this, please kindly let me know if there is something I can improve. :)
-Here described implementation, design consideration, and what we can improve in the future, but due to the limit of time resources, we did not do.
+
+Here described implementation, design consideration, and what we can improve in the future, but due to the limit of time and resources, we did not do.
 
 # 1. Implementation
 
@@ -47,7 +48,7 @@ Dependencies we used are as below:
 * Jetty for embedded http server
 * grpc-alts, protoc for gRPC
 * failSafe for reliability patterns [5]
-* testng, jmockit, joor for testing
+* testng, jmockit, joor, jersey-test-framework for testing
 
 we also consider using Spring-boot or Play, but Jersey with embedded Jetty seems more light-weight.
 
