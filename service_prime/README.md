@@ -1,4 +1,5 @@
-Here described design consideration, implementation, and what we can improve in the future, but due to the limit of time resources, we did not do.
+Thank you for taking time to read this, please kindly let me know if there is something I can improve. :)
+Here described implementation, design consideration, and what we can improve in the future, but due to the limit of time resources, we did not do.
 
 # 1. Implementation
 
