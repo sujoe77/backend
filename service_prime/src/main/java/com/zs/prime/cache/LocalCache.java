@@ -8,7 +8,7 @@ public class LocalCache {
     private static final String KEY = "PRIME_NUMBERS";
     //use ConcurrentHashMap since it is thread safe
     private static final ConcurrentHashMap<String, int[]> cache = new ConcurrentHashMap<String, int[]>() {{
-        put(KEY, new int[]{1, 2, 3, 5, 7});
+        put(KEY, new int[]{1, 2, 3, 5, 7, 11, 13, 17, 19, 23, 29});
     }};
 
     public static int[] getCacheValue() {
