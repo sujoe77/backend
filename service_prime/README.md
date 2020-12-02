@@ -203,6 +203,7 @@ for example, better performance, scalability etc. just list some of them here
 
     we can use bitmap to map integers to bit, for example instead of integer array [1,2,3,5,7] we can save it as [01010111]
     then we can use one Java Integer to save prime number from 1 to 31.
+    but we need to keep in mind, distribution of prime number will be more and more sparse,   Proportional to 1 / ln(x), so we should use it when difference of two prime number less than 32.
 
 * 1 proxy service, multiple gRPCs
     
