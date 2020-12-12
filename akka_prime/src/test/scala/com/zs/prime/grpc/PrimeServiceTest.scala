@@ -44,23 +44,33 @@ class PrimeServiceTest extends AnyWordSpec
 
   override def afterAll: Unit = {
     ActorTestKit.shutdown(clientSystem)
+    ActorTestKit.shutdown(serverSystem)
     testKit.shutdownTestKit()
   }
 
   "PrimeService" should {
     "return list of primes" in {
-      val request = PrimeRequest.of(10)
-      val reply = client.getPrimes(request)
-      val queue = mutable.Queue[Int]()
-      reply.runForeach(
-        r => queue.enqueue(r.prime)
-      ).onComplete {
-        case Success(_) =>
-          assert(queue.toArray.equals(1, 2, 3, 5, 7))
-          println("streaming done")
-        case Failure(e) =>
-          println(s"Error : $e")
-      }(clientSystem.executionContext)
+      def verify(n: Int, expected: Array[Int]) = {
+        val request = PrimeRequest.of(n)
+        val reply = client.getPrimes(request)
+        val queue = mutable.Queue[Int]()
+        reply.runForeach(
+          r => queue.enqueue(r.prime)
+        ).onComplete {
+          case Success(_) =>
+            assert(queue.toArray.equals(expected))
+            println("streaming done")
+          case Failure(e) =>
+            println(s"Error : $e")
+        }(clientSystem.executionContext)
+      }
+
+      verify(1, Array(1))
+      verify(2, Array(1, 2))
+      verify(5, Array(1, 2, 3, 5))
+      verify(10, Array(1, 2, 3, 5, 7))
+      verify(20, Array(1, 2, 3, 5, 7, 11, 13, 17, 19))
+      verify(50, Array(1, 2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47))
     }
   }
 }
