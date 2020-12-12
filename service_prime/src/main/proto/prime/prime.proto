@@ -21,7 +21,7 @@ option objc_class_prefix = "HLW";
 package grpc;
 
 service PrimeService {
-  rpc getPrimes (PrimeRequest) returns (PrimeResponse) {}
+  rpc getPrimes (PrimeRequest) returns (stream PrimeResponse) {}
 }
 
 message PrimeRequest {
@@ -29,7 +29,7 @@ message PrimeRequest {
 }
 
 message PrimeResponse {
-  repeated int32 prime = 1;
+  int32 prime = 1;
   int32 errorCode = 2;
   string errorMessage = 3;
 }

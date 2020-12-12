@@ -24,6 +24,7 @@ import io.grpc.ServerBuilder;
 import io.grpc.stub.StreamObserver;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
@@ -51,23 +52,23 @@ public final class PrimeServer extends PrimeServiceGrpc.PrimeServiceImplBase {
 
     @Override
     public void getPrimes(PrimeRequest request, StreamObserver<PrimeResponse> observer) {
-        PrimeResponse response;
         long start = System.currentTimeMillis();
+        List<Integer> ret = new ArrayList<>();
         try {
             int n = request.getN();
             logger.log(INFO, "gRPC server got request: " + n);
-            List<Integer> ret = LocalCache.loadToN(n);
+            ret = LocalCache.loadToN(n);
             if (ret.isEmpty()) {
                 logger.log(INFO, "gRPC server cache miss, compute it!!");
                 ret = computePrimes(n);
             }
-            response = toResponse(observer, ret, "", 0);
+            toResponse(observer, ret, "");
         } catch (Throwable t) {
             logger.log(Level.SEVERE, format("Met exception when calculate primes, %s", t.getMessage()));
-            response = toResponse(observer, new LinkedList<>(), t.getMessage(), -1);
+            toResponse(observer, new LinkedList<>(), t.getMessage());
         }
         logger.log(INFO, format("gRPC server return: [%s], with latency %d milli-seconds",
-                response.toString(), System.currentTimeMillis() - start));
+                ret.toString(), System.currentTimeMillis() - start));
     }
 
     private List<Integer> computePrimes(int n) {
@@ -76,14 +77,15 @@ public final class PrimeServer extends PrimeServiceGrpc.PrimeServiceImplBase {
         return asList(valuesFromCompute);
     }
 
-    private PrimeResponse toResponse(StreamObserver<PrimeResponse> observer, List<Integer> ret, String errorMessage, int errorCode) {
+    private void toResponse(StreamObserver<PrimeResponse> observer, List<Integer> ret, String errorMessage) {
         PrimeResponse.Builder builder = PrimeResponse.newBuilder();
-        PrimeResponse response = builder.addAllPrime(ret)
-                .setErrorCode(errorCode)
-                .setErrorMessage(errorMessage)
-                .build();
-        observer.onNext(response);
+        for (int i : ret) {
+            PrimeResponse response = builder.setPrime(i)
+//                    .setErrorCode(0)
+                    .setErrorMessage(errorMessage)
+                    .build();
+            observer.onNext(response);
+        }
         observer.onCompleted();
-        return response;
     }
 }

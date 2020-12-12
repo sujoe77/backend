@@ -23,11 +23,11 @@ import net.jodah.failsafe.RetryPolicy;
 import net.jodah.failsafe.Timeout;
 
 import java.time.Duration;
+import java.util.Iterator;
 import java.util.concurrent.ExecutionException;
 import java.util.logging.Logger;
 
 import static com.zs.prime.grpc.PrimeServiceGrpc.newBlockingStub;
-import static io.grpc.ManagedChannelBuilder.forAddress;
 import static java.lang.String.format;
 import static java.util.logging.Level.INFO;
 import static java.util.logging.Level.SEVERE;
@@ -35,34 +35,22 @@ import static java.util.logging.Level.SEVERE;
 public final class PrimeClient {
     private static final Logger logger = Logger.getLogger(PrimeClient.class.getName());
 
-    public PrimeResponse callGPPC(int n, String address, int port) throws ExecutionException, InterruptedException {
+    public Iterator<PrimeResponse> callGPPC(int n, ManagedChannel channel) throws ExecutionException, InterruptedException {
         long start = System.currentTimeMillis();
-        logger.log(INFO, format("Calling gRPC service: %s:%d with %d", address, port, n));
-        ManagedChannel[] channel = new ManagedChannel[]{null};
-        PrimeResponse response;
-        try {
-            channel[0] = forAddress(address, port)
-                    .usePlaintext()
-                    .build();
-
-            PrimeRequest request = PrimeRequest.newBuilder()
-                    .setN(n)
-                    .build();
-            FailsafeExecutor<Object> executor = Failsafe.with(getRetryPolicy(), getTimeOut());
-            response = executor
-                    .getAsync(() -> newBlockingStub(channel[0]).getPrimes(request))
-                    .get();
-            if (response != null) {
-                logger.log(INFO, format("gRPC service return: %s, errorCode: %d, errorMessage: [%s], latency: %d milli-seconds",
-                        response.getPrimeList().toString(),
-                        response.getErrorCode(),
-                        response.getErrorMessage(),
-                        System.currentTimeMillis() - start));
-            }
-        } finally {
-            if (channel[0] != null) {
-                channel[0].shutdown();
-            }
+        Iterator<PrimeResponse> response;
+        PrimeRequest request = PrimeRequest.newBuilder()
+                .setN(n)
+                .build();
+        FailsafeExecutor<Object> executor = Failsafe.with(getRetryPolicy(), getTimeOut());
+        response = executor
+                .getAsync(() -> newBlockingStub(channel).getPrimes(request))
+                .get();
+        if (response != null) {
+            logger.log(INFO, format("gRPC service return: %s, errorCode: %d, errorMessage: [%s], latency: %d milli-seconds",
+                    response, //response.getPrimeList().toString(),
+                    0, //response.getErrorCode(),
+                    "", //response.getErrorMessage(),
+                    System.currentTimeMillis() - start));
         }
         return response;
     }
@@ -81,7 +69,7 @@ public final class PrimeClient {
 
     private Timeout<Object> getTimeOut() {
         return Timeout.of(Duration.ofSeconds(30)).onFailure(event -> {
-            throw new RuntimeException("Send log to Azure timeout!!", event.getFailure());
+            throw new RuntimeException("calling gPRC timeout!!", event.getFailure());
         });
     }
 }
