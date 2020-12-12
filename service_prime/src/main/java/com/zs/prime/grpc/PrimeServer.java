@@ -18,19 +18,19 @@ package com.zs.prime.grpc;
 
 import com.zs.prime.Config;
 import com.zs.prime.cache.LocalCache;
-import com.zs.prime.math.Eratosthenes;
+import com.zs.prime.math.PrimeIterator;
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
 import io.grpc.stub.StreamObserver;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import static com.google.common.primitives.Ints.asList;
 import static java.lang.String.format;
 import static java.util.logging.Level.INFO;
 
@@ -54,34 +54,38 @@ public final class PrimeServer extends PrimeServiceGrpc.PrimeServiceImplBase {
     public void getPrimes(PrimeRequest request, StreamObserver<PrimeResponse> observer) {
         long start = System.currentTimeMillis();
         List<Integer> ret = new ArrayList<>();
+        Iterator iterator;
         try {
             int n = request.getN();
             logger.log(INFO, "gRPC server got request: " + n);
-            ret = LocalCache.loadToN(n);
-            if (ret.isEmpty()) {
+            iterator = LocalCache.loadToN(n).iterator();
+            if (!iterator.hasNext()) {
                 logger.log(INFO, "gRPC server cache miss, compute it!!");
-                ret = computePrimes(n);
+                iterator = computePrimes(n);
             }
-            toResponse(observer, ret, "");
+            toResponse(observer, iterator, "");
         } catch (Throwable t) {
             logger.log(Level.SEVERE, format("Met exception when calculate primes, %s", t.getMessage()));
-            toResponse(observer, new LinkedList<>(), t.getMessage());
+            toResponse(observer, new LinkedList<Integer>().iterator(), t.getMessage());
         }
         logger.log(INFO, format("gRPC server return: [%s], with latency %d milli-seconds",
                 ret.toString(), System.currentTimeMillis() - start));
     }
 
-    private List<Integer> computePrimes(int n) {
-        int[] valuesFromCompute = new Eratosthenes().getPrimes(n);
-        LocalCache.setCacheValue(valuesFromCompute);
-        return asList(valuesFromCompute);
+    private Iterator<Integer> computePrimes(int n) {
+        return new PrimeIterator(n);
     }
 
-    private void toResponse(StreamObserver<PrimeResponse> observer, List<Integer> ret, String errorMessage) {
+    private void toResponse(StreamObserver<PrimeResponse> observer, Iterator<Integer> iterator, String errorMessage) {
         PrimeResponse.Builder builder = PrimeResponse.newBuilder();
-        for (int i : ret) {
-            PrimeResponse response = builder.setPrime(i)
-//                    .setErrorCode(0)
+        while (iterator.hasNext()) {
+            PrimeResponse response = builder.setPrime(iterator.next())
+                    .setErrorMessage(errorMessage)
+                    .build();
+            observer.onNext(response);
+        }
+        if (errorMessage != null && !errorMessage.isEmpty()) {
+            PrimeResponse response = builder.setPrime(-1)
                     .setErrorMessage(errorMessage)
                     .build();
             observer.onNext(response);
