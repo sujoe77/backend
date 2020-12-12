@@ -6,12 +6,10 @@ import mockit.Mock;
 import mockit.MockUp;
 import mockit.Mocked;
 import net.jodah.failsafe.*;
-import net.jodah.failsafe.function.CheckedSupplier;
-import org.joor.Reflect;
 import org.testng.annotations.Test;
 
 import java.time.Duration;
-import java.util.Arrays;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -19,13 +17,14 @@ import java.util.concurrent.ExecutionException;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+import static io.grpc.ManagedChannelBuilder.forAddress;
 import static org.joor.Reflect.onClass;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
 
 public class PrimeClientTest {
     @Mocked
-    PrimeResponse response;
+    Iterator<PrimeResponse> response;
     @Mocked
     PrimeServiceGrpc.PrimeServiceBlockingStub stub;
 
@@ -58,7 +57,9 @@ public class PrimeClientTest {
         }};
 
         PrimeClient client = new PrimeClient();
-        PrimeResponse ret = client.callGPPC(100, "localhost", 8080);
+        Iterator<PrimeResponse> ret = client.callGPPC(100, forAddress("localhost", 8080)
+                .usePlaintext()
+                .build());
         assertEquals(ret, response);
         assertEquals(requestList.get(0).getN(), 100);
     }
@@ -98,7 +99,7 @@ public class PrimeClientTest {
 
             @Mock
             private <T> CompletableFuture<T> callAsync(Function<AsyncExecution, Supplier<CompletableFuture<ExecutionResult>>> supplierFn, boolean asyncExecution) {
-                return new CompletableFuture<T>(){
+                return new CompletableFuture<T>() {
                     @Override
                     public T get() throws InterruptedException, ExecutionException {
                         return (T) response;
@@ -108,7 +109,9 @@ public class PrimeClientTest {
         };
 
         PrimeClient client = new PrimeClient();
-        PrimeResponse ret = client.callGPPC(100, "localhost", 8080);
+        Iterator<PrimeResponse> ret = client.callGPPC(100, forAddress("localhost", 8080)
+                .usePlaintext()
+                .build());
         assertEquals(ret, response);
     }
 }

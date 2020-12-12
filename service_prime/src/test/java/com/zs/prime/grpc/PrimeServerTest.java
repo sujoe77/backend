@@ -8,6 +8,8 @@ import mockit.MockUp;
 import org.testng.annotations.Test;
 import org.testng.internal.collections.Ints;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -32,7 +34,7 @@ public class PrimeServerTest {
         server.getPrimes(PrimeRequest.newBuilder().setN(10).build(), new StreamObserver<PrimeResponse>() {
             @Override
             public void onNext(PrimeResponse primeResponse) {
-                ret.addAll(primeResponse.getPrimeList());
+                ret.add(primeResponse.getPrime());
             }
 
             @Override
@@ -55,8 +57,8 @@ public class PrimeServerTest {
         LocalCache.setCacheValue(new int[]{1, 2, 3, 5, 7, 11, 13});
         new MockUp<PrimeServer>() {
             @Mock
-            private List<Integer> computePrimes(int n) {
-                return asList(1, 2, 3, 5, 7, 11, 13, 17, 19, 23, 29);
+            private Iterator<Integer> computePrimes(int n) {
+                return asList(1, 2, 3, 5, 7, 11, 13, 17, 19, 23, 29).iterator();
             }
         };
         boolean[] completeCalled = new boolean[]{false};
@@ -64,7 +66,7 @@ public class PrimeServerTest {
         server.getPrimes(PrimeRequest.newBuilder().setN(30).build(), new StreamObserver<PrimeResponse>() {
             @Override
             public void onNext(PrimeResponse primeResponse) {
-                ret.addAll(primeResponse.getPrimeList());
+                ret.add(primeResponse.getPrime());
             }
 
             @Override
@@ -101,7 +103,11 @@ public class PrimeServerTest {
             }
         };
         PrimeServer server = new PrimeServer();
-        List<Integer> actual = on(server).call("computePrimes", 10).get();
-        assertEquals(actual, Ints.asList(expected));
+        Iterator<Integer> actual = on(server).call("computePrimes", 10).get();
+        List<Integer> actualList = new ArrayList<>();
+        while(actual.hasNext()){
+            actualList.add(actual.next());
+        }
+        assertEquals(actualList, Ints.asList(expected));
     }
 }
