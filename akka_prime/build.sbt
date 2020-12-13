@@ -9,6 +9,8 @@ enablePlugins(AkkaGrpcPlugin)
 
 akkaGrpcGeneratedLanguages := Seq(AkkaGrpc.Scala)
 
+autoScalaLibrary := false
+
 libraryDependencies ++= Seq(
   "com.typesafe.akka" %% "akka-actor-typed" % akkaVersion,
   "com.typesafe.akka" %% "akka-discovery" % akkaVersion,
@@ -17,9 +19,10 @@ libraryDependencies ++= Seq(
   "com.typesafe.akka" %% "akka-actor-testkit-typed" % akkaVersion % Test,
   "com.typesafe.akka" %% "akka-stream-testkit" % akkaVersion % Test,
   "junit" % "junit" % "4.13" % Test,
-  "com.novocode" % "junit-interface" % "0.11" % Test,
+  "com.novocode" % "junit-interface" % "0.10" % Test,
   "org.scalactic" %% "scalactic" % "3.2.2",
-  "org.scalatest" %% "scalatest" % "3.2.2" % Test
+  "org.scalatest" %% "scalatest" % "3.2.2" % Test,
+  "org.jooq" % "joor-java-8" % "0.9.13" % Test,
 )
 
-testOptions += Tests.Argument(TestFrameworks.ScalaTest, "-v")
+testOptions += Tests.Argument(TestFrameworks.JUnit, "-a")
