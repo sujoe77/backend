@@ -14,6 +14,8 @@ In order to support streaming, we did the changes below since Dec. 10
     * describe the streaming solution in [2.6 Streaming solution](#26-Streaming-solution)
     * update other part according to the change
 
+But of the simplicity, we did NOT further improve the efficiency of PrimeIterator, and adapt the localCahce to the new changes, it can be improved in the future. :)
+
 # 1. Implementation
 
 ## 1.0 Project Structure
@@ -210,10 +212,16 @@ Another thing is Java thread is heavy, golang and Erlang do it better.
 
 ## 2.6 Streaming solution
 
-### 2.6.1 Stream Framework
+There are several places in the service we need to implement continual streaming processing, from back to front end:
 
-When we design a system support streaming, it is better to follow the "Reactive Stream" specification [10], 
-so the system will more compatible and take advantage of existing frameworks. 
+* The prime number generator
+* the gRPC service
+* the REST service
+
+### 2.6.1 The Framework
+
+We should implement something according to "Reactive Stream" specification [10], 
+so the system will more compatible with other products and take advantage of existing frameworks. 
 
 There are several frameworks we can consider when implement streamed solution, for example, RxJava and Spring and Akka Stream.
 Since we use Scala, and Akka has a good support for Stream with gRPC, so Akka Stream could be a good choice.
@@ -221,7 +229,7 @@ Since we use Scala, and Akka has a good support for Stream with gRPC, so Akka St
 ### 2.6.2 Prime Generator
 
 Our prime number generator also need to support streaming, it should continually generate prime numbers, instead of return a big array at the end of processing.
-They are many ways we can construct a Source, for our case, we may have 3 choices:
+In Akka Stream, there are many ways we can construct a Source, for our case, we could have 3 options:
 
 * Source.queue
 
@@ -231,12 +239,13 @@ They are many ways we can construct a Source, for our case, we may have 3 choice
 * Publisher
     
     publisher is another option, for example, we can use ActorPublisher, and send prime number as Actor messages.
-    this solution can have better extensibility, but it is a little complex.
+    this solution have better extensibility, but it is a little complex.
 
 * Source.fromIterator
 
-    we implemented Prime generator as an Iterator, its implementation is straight forward, also, comparing with 2 solutions above, it is in a pulling mode,
-    so we do not have back pressure problem.
+    Since we need is something can continually generate prime numbers, it makes sense to implement it as an Iterator.     
+    comparing with 2 solutions above, it will run in a pulling mode, so we won't face back pressure problem.
+    like below:
 
 ```
 public class PrimeIterator implements Iterator<Integer> {
@@ -255,9 +264,9 @@ public class PrimeIterator implements Iterator<Integer> {
 }
 ```
 
-### 2.6.3 gRPC streaming api
+### 2.6.3 gRPC service
 
-we need support streaming in gRPC, so in proto file we have "stream PrimeResponse" 
+We also need streaming in gRPC, so in proto file we have "**stream** PrimeResponse" 
 
 ```
     ...
@@ -267,8 +276,12 @@ we need support streaming in gRPC, so in proto file we have "stream PrimeRespons
 
 ### 2.6.4 REST service
 
-On the REST service, we use a gRPC streaming client, to get the gRPC response as an Iterator, then we use StreamingOutput to send response as stream.
-at the end of response, we close the gRPC channel with @Context "CloseableService closer". 
+In the REST service, we use a gRPC streaming client, to get the gRPC response as an Iterator, then we use StreamingOutput to send response as stream.
+at the end of response, we close the gRPC channel with 
+
+```
+@Context "CloseableService closer".
+``` 
 
 # 3. What's Next
 There are something we can also consider, if we want to further improve the service, 
