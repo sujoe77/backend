@@ -2,6 +2,18 @@ Thank you for taking time to read this, please kindly let me know if there is so
 
 Here described implementation, design consideration, and what we can improve in the future, but due to the limit of time and resources, we did not do.
 
+# 0. New Changes
+
+In order to support streaming, we did the changes below since Dec. 10
+
+1. split 1 project into 2:
+    * rest/  the rest proxy service
+    * gRPC/  the gRPC service, reimplemented with Akka-grpc and Akka-stream, scala, and sbt
+
+2. Update this README.md file:
+    * describe the streaming solution in **[2.6 Streaming solution](##2.6 Streaming solution)**
+    * update other part according to the change
+
 # 1. Implementation
 
 ## 1.0 Project Structure
@@ -18,8 +30,8 @@ REST service with port 8080, gPRC port 10001.
 
 * Main classes
 ```
-    service_prime/src/java/com/zs/prime/rest/RestServer    ->  main class for proxy-service
-    akka_prime/src/main/scala/PrimeServerS.scala   ->  main class for gRPC service
+    rest/src/java/com/zs/prime/rest/RestServer    ->  main class for proxy-service
+    gRPC/src/main/scala/PrimeServerS.scala   ->  main class for gRPC service
 ```
 
 ## 1.1 Packages
@@ -196,7 +208,7 @@ for example, max number of file we can open etc, we may also bypass the OS when 
 
 Another thing is Java thread is heavy, golang and Erlang do it better.
 
-## 2.6 Reactive Stream
+## 2.6 Streaming solution
 
 ### 2.6.1 Stream Framework
 
