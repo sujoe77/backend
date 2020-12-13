@@ -1,51 +1,51 @@
-package com.zs.prime;
+package com.zs.prime.math;
 
-import com.zs.prime.math.Eratosthenes;
-import com.zs.prime.math.PrimeCalculator;
-import org.testng.annotations.Test;
+import org.junit.Test;
 
+import static com.google.common.primitives.Ints.asList;
 import static org.joor.Reflect.on;
-import static org.testng.Assert.assertEquals;
-import static org.testng.internal.collections.Ints.asList;
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
 
 public class EratosthenesTest {
 
     @Test
     public void testGetPrimes() {
+        System.out.println("testGetPrimes");
         PrimeCalculator calculator = new Eratosthenes();
         int[] ret = calculator.getPrimes(-10);
-        assertEquals(ret, new int[]{});
+        assertEquals(ret.length, 0);
 
         ret = calculator.getPrimes(-1);
-        assertEquals(ret, new int[]{});
+        assertEquals(ret.length, 0);
 
         ret = calculator.getPrimes(0);
-        assertEquals(ret, new int[]{});
+        assertEquals(ret.length, 0);
 
 
         ret = calculator.getPrimes(1);
-        assertEquals(ret, new int[]{1});
+        assertArrayEquals(ret, new int[]{1});
 
         ret = calculator.getPrimes(2);
-        assertEquals(ret, new int[]{1, 2});
+        assertArrayEquals(ret, new int[]{1, 2});
 
         ret = calculator.getPrimes(3);
-        assertEquals(ret, new int[]{1, 2, 3});
+        assertArrayEquals(ret, new int[]{1, 2, 3});
 
         ret = calculator.getPrimes(4);
-        assertEquals(ret, new int[]{1, 2, 3});
+        assertArrayEquals(ret, new int[]{1, 2, 3});
 
         ret = calculator.getPrimes(5);
-        assertEquals(ret, new int[]{1, 2, 3, 5});
+        assertArrayEquals(ret, new int[]{1, 2, 3, 5});
 
         ret = calculator.getPrimes(10);
-        assertEquals(ret, new int[]{1, 2, 3, 5, 7});
+        assertArrayEquals(ret, new int[]{1, 2, 3, 5, 7});
 
         ret = calculator.getPrimes(20);
-        assertEquals(ret, new int[]{1, 2, 3, 5, 7, 11, 13, 17, 19});
+        assertArrayEquals(ret, new int[]{1, 2, 3, 5, 7, 11, 13, 17, 19});
 
         ret = calculator.getPrimes(100);
-        assertEquals(ret, new int[]{1, 2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97});
+        assertArrayEquals(ret, new int[]{1, 2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97});
     }
 
     //test private method, use reflection, make sure method with minimum visibility
