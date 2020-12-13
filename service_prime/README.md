@@ -4,10 +4,14 @@ Here described implementation, design consideration, and what we can improve in 
 
 # 1. Implementation
 
-## 1.0 Run the service
-Rest service in the folder service_prime
-gRPC service in the folder akka_prime
+## 1.0 Project Structure
+
+Rest service in the folder rest,
+ 
+gRPC service in the folder gRPC,
+ 
 Services can run either in IDE, or from command line with main calsses specified with dependencies.
+
 No need to deploy to tomcat or JEE server.
 
 REST service with port 8080, gPRC port 10001.
@@ -21,14 +25,12 @@ REST service with port 8080, gPRC port 10001.
 ## 1.1 Packages
 The code has been arranged in packages as below:
 
+in gRPC service
+
 * src/main/proto/prime/prime.proto
 
     the proto file
     
-* com.zs.prime.cache
-
-    a local cache
-
 * com.zs.prime.grpc
 
     gRPC serer and client
@@ -37,6 +39,12 @@ The code has been arranged in packages as below:
 
     the class calculate primes
 
+in REST service
+
+* com.zs.prime.cache
+
+    a local cache
+
 * com.zs.prime.rest
 
     proxy-service for REST
@@ -44,6 +52,7 @@ The code has been arranged in packages as below:
 * com.zs.prime.rest.error
 
     error handler for REST service
+    
 
 ## 1.2 Dependencies
 Dependencies we used are as below:
@@ -65,25 +74,23 @@ For streaming version, we use com.zs.prime.math.PrimeIterator, which is iterator
 
 ## 1.4 Testing
 
-Test classes as below, ProxyServiceTest is integration test, others are unit tests.
 ```
 in REST service
-com.zs.prime.rest.ProxyServiceTest    ->  Test for proxy service in REST
+com.zs.prime.rest.ProxyServiceTest    ->  integration test for proxy service in REST
 com.zs.prime.cache.LocalCacheTest  ->  test for local cache
 com.zs.prime.grpc.PrimeClientTest   ->  gRPC client test
-com.zs.prime.grpc.PrimeServerTest   ->  gRPC server test
-com.zs.prime.EratosthenesTest   ->  prime algorithm test
 
 in gRPC service
 com.zs.prime.PrimeServiceTest   ->  integration test for gRPC service
 PrimeIteratorTest   ->  unit tests for PrimeGenerator
+com.zs.prime.EratosthenesTest   ->  prime algorithm test
 ```
 
 
 # 2. Design considerations
 
 ## 2.1 Consistency
-This two services are read-only, no transaction, or Linearizability [9] required.
+These two services are read-only, no transaction, or Linearizability [9] required.
 the only place we should pay attention to, is in the "com.zs.prime.cache.LocalCache", we should consider race condition when one thread will write and the other want to read situation.
 our workload is read-intensive, so a concurrent collection should be good enough. 
 we use ConcurrentHashMap, since it provide a thread-safe and efficient solution to our cache use case.
@@ -112,6 +119,7 @@ since our service is simple and stateless, availability should be simple we can 
     Netflix have a set of tools to dealing with this, like hystrix. here we use FailSafe [5], a light-weight framework to mitigate these problems.  
 
 ## 2.3 Fault tolerance
+
 * Validation and exception handling
 
 	In proxy-service, we will validate the number user input, if it is less than 0, we will reject the request.
@@ -204,7 +212,7 @@ Our prime number generator also need to support streaming, it should continually
 They are many ways we can construct a Source, for our case, we may have 3 choices:
 
 * Source.queue
-    
+
     we can create queue with back pressure support, and prime generator can feed this queue.
     the problem is we need to set an appropriate buffer, back pressure, and throttle.
   
@@ -234,14 +242,15 @@ public class PrimeIterator implements Iterator<Integer> {
     }
 }
 ```
+
 ### 2.6.3 gRPC streaming api
 
 we need support streaming in gRPC, so in proto file we have "stream PrimeResponse" 
 
 ```
-...
+    ...
     rpc getPrimes (PrimeRequest) returns (stream PrimeResponse) {}
-...
+    ...
 ```
 
 ### 2.6.4 REST service
