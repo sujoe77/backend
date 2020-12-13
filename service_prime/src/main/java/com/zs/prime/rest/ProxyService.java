@@ -3,7 +3,6 @@ package com.zs.prime.rest;
 import com.zs.prime.cache.LocalCache;
 import com.zs.prime.grpc.PrimeClient;
 import com.zs.prime.grpc.PrimeResponse;
-import com.zs.prime.grpc.PrimeServer;
 import io.grpc.ManagedChannel;
 import org.glassfish.jersey.server.CloseableService;
 
@@ -33,7 +32,7 @@ import static javax.ws.rs.core.MediaType.TEXT_PLAIN;
 
 @Path("prime")
 public class ProxyService {
-    private static final Logger logger = Logger.getLogger(PrimeServer.class.getName());
+    private static final Logger logger = Logger.getLogger(ProxyService.class.getName());
 
     @GET
     @Produces(TEXT_PLAIN)

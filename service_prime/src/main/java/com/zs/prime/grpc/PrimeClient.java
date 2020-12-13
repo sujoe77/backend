@@ -47,9 +47,9 @@ public final class PrimeClient {
                 .get();
         if (response != null) {
             logger.log(INFO, format("gRPC service return: %s, errorCode: %d, errorMessage: [%s], latency: %d milli-seconds",
-                    response, //response.getPrimeList().toString(),
-                    0, //response.getErrorCode(),
-                    "", //response.getErrorMessage(),
+                    response,
+                    0,
+                    "",
                     System.currentTimeMillis() - start));
         }
         return response;

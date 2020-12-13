@@ -22,7 +22,6 @@ public class EratosthenesTest {
         ret = calculator.getPrimes(0);
         assertEquals(ret.length, 0);
 
-
         ret = calculator.getPrimes(1);
         assertArrayEquals(ret, new int[]{1});
 
