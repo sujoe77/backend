@@ -11,7 +11,7 @@ In order to support streaming, we did the changes below since Dec. 10
     * gRPC/  the gRPC service, reimplemented with Akka-grpc and Akka-stream, scala, and sbt
 
 2. Update this README.md file:
-    * describe the streaming solution in **[2.6 Streaming solution](##2.6 Streaming solution)**
+    * describe the streaming solution in [2.6 Streaming solution](##2.6 Streaming solution)
     * update other part according to the change
 
 # 1. Implementation
