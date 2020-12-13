@@ -5,21 +5,24 @@ Here described implementation, design consideration, and what we can improve in 
 # 1. Implementation
 
 ## 1.0 Run the service
-Everything is in one jar, services can run either in IDE, or from command line with main calsses specified with dependencies.
+Rest service in the folder service_prime
+gRPC service in the folder akka_prime
+Services can run either in IDE, or from command line with main calsses specified with dependencies.
 No need to deploy to tomcat or JEE server.
 
 REST service with port 8080, gPRC port 10001.
 
 * Main classes
 ```
-    com.zs.prime.rest.RestServer    ->  main class for proxy-service
-    com.zs.prime.grpc.PrimeServer   ->  main class for gRPC service     
+    service_prime/src/java/com/zs/prime/rest/RestServer    ->  main class for proxy-service
+    akka_prime/src/main/scala/PrimeServerS.scala   ->  main class for gRPC service
 ```
 
 ## 1.1 Packages
 The code has been arranged in packages as below:
 
 * src/main/proto/prime/prime.proto
+
     the proto file
     
 * com.zs.prime.cache
@@ -45,27 +48,35 @@ The code has been arranged in packages as below:
 ## 1.2 Dependencies
 Dependencies we used are as below:
 * Jersey, for REST service
-* Jetty for embedded http server
+* Jetty for REST embedded http server
 * grpc-alts, protoc for gRPC
+* akka-actor-typed, akka-discovery, akka-stream, akka-pki etc for Reactive Stream and gRPC
 * failSafe for reliability patterns [5]
-* testng, jmockit, joor, jersey-test-framework for testing
+* junit, testng, jmockit, joor, jersey-test-framework, akka-stream-testkit, scalatest etc for testing
 
-we also consider using Spring-boot or Play, but Jersey with embedded Jetty seems more light-weight.
+we use Jersey with embedded Jetty for REST, and Akka Stream and Akka gRPC for gRPC service.
 
 ## 1.3 Prime number algorithm
 
 There is a classic algorithm for the prime number problem, "Sieve of Eratosthenes" [1], The time complexity of this algorithm is O(n log log n).
-So we won't re-invent the wheels here, just use it.
+the implementation is in com.zs.prime.math.Eratosthenes, which return an int[], but does NOT support streaming.
+
+For streaming version, we use com.zs.prime.math.PrimeIterator, which is iterator can continue generate prime numbers until N.
 
 ## 1.4 Testing
 
 Test classes as below, ProxyServiceTest is integration test, others are unit tests.
 ```
+in REST service
 com.zs.prime.rest.ProxyServiceTest    ->  Test for proxy service in REST
 com.zs.prime.cache.LocalCacheTest  ->  test for local cache
 com.zs.prime.grpc.PrimeClientTest   ->  gRPC client test
 com.zs.prime.grpc.PrimeServerTest   ->  gRPC server test
 com.zs.prime.EratosthenesTest   ->  prime algorithm test
+
+in gRPC service
+com.zs.prime.PrimeServiceTest   ->  integration test for gRPC service
+PrimeIteratorTest   ->  unit tests for PrimeGenerator
 ```
 
 
@@ -112,7 +123,7 @@ since our service is simple and stateless, availability should be simple we can 
     we use error code and error message to communicate error between proxy-service and gRPC service.
     ```
     message PrimeResponse {
-      repeated int32 prime = 1;
+      int32 prime = 1;
       int32 errorCode = 2;
       string errorMessage = 3;
     }
@@ -154,7 +165,7 @@ response = executor
 
 our use of cache also help improve the throughput, and reduce IO and the workload of backend.
 
-make each "thread" more light weight also help improve the  
+make each "thread" more light-weight also help improve the throughput.
 
 ### 2.4.2 Latency
 
@@ -176,6 +187,67 @@ When concurrent connections numbers are very high, we need to consider limitatio
 for example, max number of file we can open etc, we may also bypass the OS when doing IO. see C10K problem. [7]
 
 Another thing is Java thread is heavy, golang and Erlang do it better.
+
+## 2.6 Reactive Stream
+
+### 2.6.1 Stream Framework
+
+When we design a system support streaming, it is better to follow the "Reactive Stream" specification [10], 
+so the system will more compatible and take advantage of existing frameworks. 
+
+There are several frameworks we can consider when implement streamed solution, for example, RxJava and Spring and Akka Stream.
+Since we use Scala, and Akka has a good support for Stream with gRPC, so Akka Stream could be a good choice.
+
+### 2.6.2 Prime Generator
+
+Our prime number generator also need to support streaming, it should continually generate prime numbers, instead of return a big array at the end of processing.
+They are many ways we can construct a Source, for our case, we may have 3 choices:
+
+* Source.queue
+    
+    we can create queue with back pressure support, and prime generator can feed this queue.
+    the problem is we need to set an appropriate buffer, back pressure, and throttle.
+  
+* Publisher
+    
+    publisher is another option, for example, we can use ActorPublisher, and send prime number as Actor messages.
+    this solution can have better extensibility, but it is a little complex.
+
+* Source.fromIterator
+
+    we implemented Prime generator as an Iterator, its implementation is straight forward, also, comparing with 2 solutions above, it is in a pulling mode,
+    so we do not have back pressure problem.
+
+```
+public class PrimeIterator implements Iterator<Integer> {
+
+    //the main logic of prime number generation
+    @Override
+    public boolean hasNext() {
+        ...
+    }
+
+    //call next to get a list of prime numbers until N
+    @Override
+    public Integer next() {
+        ...
+    }
+}
+```
+### 2.6.3 gRPC streaming api
+
+we need support streaming in gRPC, so in proto file we have "stream PrimeResponse" 
+
+```
+...
+    rpc getPrimes (PrimeRequest) returns (stream PrimeResponse) {}
+...
+```
+
+### 2.6.4 REST service
+
+On the REST service, we use a gRPC streaming client, to get the gRPC response as an Iterator, then we use StreamingOutput to send response as stream.
+at the end of response, we close the gRPC channel with @Context "CloseableService closer". 
 
 # 3. What's Next
 There are something we can also consider, if we want to further improve the service, 
@@ -225,3 +297,4 @@ for example, better performance, scalability etc. just list some of them here
 7. C10K, https://en.wikipedia.org/wiki/C10k_problem
 8. bitmap, https://en.wikipedia.org/wiki/Bitmap
 9. Linearizability, https://en.wikipedia.org/wiki/Linearizability
+10. Reactive Streams, https://en.wikipedia.org/wiki/Reactive_Streams
