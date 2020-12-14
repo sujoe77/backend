@@ -5,6 +5,7 @@ import akka.actor.typed.ActorSystem;
 import akka.http.javadsl.common.EntityStreamingSupport;
 import akka.http.javadsl.marshalling.Marshaller;
 import akka.http.javadsl.model.ContentTypes;
+import akka.http.javadsl.model.StatusCode;
 import akka.http.javadsl.server.AllDirectives;
 import akka.http.javadsl.server.PathMatchers;
 import akka.http.javadsl.server.Route;
@@ -15,6 +16,8 @@ import com.zs.prime.grpc.PrimeClient;
 import com.zs.prime.grpc.PrimeResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import static akka.http.javadsl.model.StatusCodes.BAD_REQUEST;
 
 public class Routes extends AllDirectives {
     private final static Logger log = LoggerFactory.getLogger(Routes.class);
@@ -42,8 +45,7 @@ public class Routes extends AllDirectives {
                                                     throw new IllegalArgumentException();
                                                 }
                                             } catch (IllegalArgumentException e) {
-                                                return complete(new StatusCodes.ClientError(400,  "", ""),
-                                                        "N should be a positive integer!!");
+                                                return complete(BAD_REQUEST, "N should be a positive integer!!");
                                             }
                                             Source<PrimeResponse, ?> source = new PrimeClient().callGPPC(n1, system == null ? systemDefault : system);
                                             return completeWithSource(
