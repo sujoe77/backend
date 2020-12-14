@@ -92,9 +92,8 @@ For streaming version, we use com.zs.prime.math.PrimeIterator, which is iterator
 
 ```
 in REST service
-com.zs.prime.rest.ProxyServiceTest    ->  integration test for proxy service in REST
-com.zs.prime.cache.LocalCacheTest  ->  test for local cache
-com.zs.prime.grpc.PrimeClientTest   ->  gRPC client test
+com.zs.prime.rest.RoutesTest    ->  integration test for proxy service in REST
+
 
 in gRPC service
 com.zs.prime.PrimeServiceTest   ->  integration test for gRPC service
@@ -294,11 +293,33 @@ class PrimeServiceSImpl(implicit mat: Materializer) extends PrimeService {
 
 ### 2.6.4 REST service
 
-In the REST service, we use a gRPC streaming client, to get the gRPC response as an Source, Akka will convert automatically as a stream.
-at the end of response, we close the gRPC channel with
+In the REST service, we use a gRPC streaming client, to get the gRPC response as an Source, Akka will convert automatically as a stream, in class com.zs.prime.rest.Routes:
 
 ```
-@Context "CloseableService closer".
+return pathPrefix("prime", () ->
+                concat(
+                        path(PathMatchers.segment(), (String n) ->
+                                concat(
+                                        get(() -> {
+                                            int n1;
+                                            try {
+                                                n1 = Integer.parseInt(n);
+                                                if (n1 < 1) {
+                                                    throw new IllegalArgumentException();
+                                                }
+                                            } catch (IllegalArgumentException e) {
+                                                return complete(BAD_REQUEST, "N should be a positive integer!!");
+                                            }
+                                            Source<PrimeResponse, ?> source = new PrimeClient().callGPPC(n1, system == null ? systemDefault : system);
+                                            return completeWithSource(
+                                                    source,
+                                                    marshaller,
+                                                    EntityStreamingSupport.csv()
+                                            );
+                                        })
+                                )
+                        )
+                )
 ```
 
 # 3. What's Next
