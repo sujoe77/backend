@@ -1,4 +1,4 @@
-package com.zs.rule.node.action;
+package com.zs.rule.tree.action;
 
 import com.zs.rule.entity.LocalCustomer;
 import com.zs.rule.entity.doc.ProductOrder;
@@ -7,8 +7,7 @@ import org.testng.annotations.Test;
 
 import java.util.Collection;
 
-import static com.zs.rule.node.action.MemberShipAction.ACTIVATE;
-import static com.zs.rule.node.action.MemberShipAction.UPDATE;
+import static com.zs.rule.tree.action.MemberShipAction.ACTIVATE;
 import static java.util.Arrays.asList;
 import static org.testng.Assert.*;
 
@@ -21,7 +20,7 @@ public class MultipleActionsTest {
                 new EmailAction()
         ));
         MemberShip club_member = new MemberShip("club member", ACTIVATE);
-        ProductOrder memberShipActivate = new ProductOrder(club_member,
+        ProductOrder memberShipActivate = new ProductOrder(1, club_member,
                 new LocalCustomer("memberA@gmail.com"));
         activateMemberShipAction.handleOrder(memberShipActivate);
         Collection<MemberShip> memberShips = memberShipActivate.getCustomer().getMemberShips();

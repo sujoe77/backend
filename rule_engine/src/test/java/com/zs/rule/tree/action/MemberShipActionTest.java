@@ -1,4 +1,4 @@
-package com.zs.rule.node.action;
+package com.zs.rule.tree.action;
 
 import com.zs.rule.entity.LocalCustomer;
 import com.zs.rule.entity.doc.ProductOrder;
@@ -7,7 +7,7 @@ import org.testng.annotations.Test;
 
 import java.util.Collection;
 
-import static com.zs.rule.node.action.MemberShipAction.UPDATE;
+import static com.zs.rule.tree.action.MemberShipAction.UPDATE;
 import static org.testng.Assert.*;
 
 public class MemberShipActionTest {
@@ -16,7 +16,7 @@ public class MemberShipActionTest {
     public void testHandleOrder() {
         MemberShipAction action = new MemberShipAction(MemberShipAction.UPDATE);
         MemberShip club_member = new MemberShip("club member", UPDATE);
-        ProductOrder memberShipUpdate = new ProductOrder(club_member,
+        ProductOrder memberShipUpdate = new ProductOrder(1, club_member,
                 new LocalCustomer("memberU@gmail.com"));
         action.handleOrder(memberShipUpdate);
         Collection<MemberShip> memberShips = memberShipUpdate.getCustomer().getMemberShips();

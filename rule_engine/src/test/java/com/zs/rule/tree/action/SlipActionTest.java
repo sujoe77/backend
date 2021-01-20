@@ -1,4 +1,4 @@
-package com.zs.rule.node.action;
+package com.zs.rule.tree.action;
 
 import com.zs.rule.entity.LocalCustomer;
 import com.zs.rule.entity.doc.ProductOrder;
@@ -13,8 +13,8 @@ public class SlipActionTest {
 
     @Test
     public void testHandleOrder() {
-        SlipAction action  = new SlipAction(new FunctionalDepartment("Packing"), "note");
-        ProductOrder bookOrder = new ProductOrder(new Book(new MediaAgent("Agent1"), "Book1"),
+        SlipAction action = new SlipAction(new FunctionalDepartment("Packing"), "note");
+        ProductOrder bookOrder = new ProductOrder(1, new Book(new MediaAgent("Agent1"), "Book1"),
                 new LocalCustomer("abc@gmail.com"));
         action.handleOrder(bookOrder);
         assertTrue(!bookOrder.getPackagingSlips().isEmpty());
