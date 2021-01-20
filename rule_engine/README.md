@@ -113,7 +113,8 @@ The inspiration of using decision tree for this problem come from:
 According to the requirements, we got a decision tree below:
 
 ### 2.3 Decision Tree based 
-![decision tree](http://./img/rule_engine.jpg "rule-engine.jpg")
+
+![decision tree](https://github.com/sujoe77/backend/blob/master/rule_engine/img/rule-engine.jpg "rule-engine.jpg")
 
 ## 3. Implementation
 
