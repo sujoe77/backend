@@ -107,13 +107,109 @@ This implementation is straight forward for database user, but it has its limita
 The inspiration of using decision tree for this problem come from:
 
 1. Machine Learning
+   
+   in Machine Learning, there is a category of model called ["Decision Trees"](https://en.wikipedia.org/wiki/Decision_tree), it is powerful as well as easy to understand.
+
+
 2. Tree data structure
+   
+   The tree and graph data structure has been widely used in computer science and most of them with good efficiency.
+
 3. Stream systems and data analytic platform
+
+  many data analytic platforms, also use graph as its underlying data model. our problem had much in common with these kind of data processing tasks.
 
 According to the requirements, we got a decision tree below:
 
 ![decision tree](https://github.com/sujoe77/backend/blob/master/rule_engine/img/rule-engine.jpg?raw=true "")
 
+comparing with "Rule Table" solution before, decision tree solution has benefits as below:
+
+1. Easy to understand
+2. Efficient to run
+3. Extensible
+
+### 2.3 Stream processing
+
+We should also consider design the rule-engine as stream based, because:
+
+1. Nature of Order data
+   
+   Orders are more like continue and unbounded data
+
+2. Lower latency
+
+   comparing with batch style processing, stream systems has lower latency
+
+3. Order of processing
+
+   if we use log-based messaging like Kafka, we can guarantee the processing order thus maintain strong consistency 
+
+Rule Engine can read all orders from a Kafka stream, process orders one by one, and finally write to database. we can scale the system by adding more kafka partitions and rule engine nodes.
+
+we can keep a checkpoint for successfully processed orders, when something goes wrong, we can replay it from Kafka.
+
+we can use consistent hashing to load balanced orders, make sure a order with same id always go to the same rule engine node, together with Order id we make sure we process the order exactly-once.
+
+We may need coordination service like Zookeeper
+
 ## 3. Implementation
 
-## What's next
+### 3.2 Run the engine
+in main method Class: "com.zs.rule.TreeRuleEngine" you will see how it works, it initialize the rule engine first, and processing a list of different orders, for each order, rule engine will do something according to rules.
+
+### 3.1 The code
+
+* Entities
+  
+  all entity classes are in package: "com.zs.rule.entity", we should keep in mind "programming to interface instead of implementations"
+
+* Decision Tree
+
+   Decision tree classes are in package: "com.zs.rule.tree".
+   There are 2 category of classes in this package:
+   1. Decision
+   
+      it represent tree node which make a decision, they will check the order received and return a true or false, for example, PhysicalProductDecision will return true for Book but false for Membership.
+
+      each Decision node has 2 sub nodes, 
+      if the predict method return true, order will be passed to its "trueNode" for further processing, if false "falseNode"
+
+   2. Action
+      
+      They will do something to the order, for example activate membership or send Email etc.
+
+* Tests
+
+  There is no logic in entity classes, all tests are against decision tree classes. for each Decision class and Action class, we verify it works as expected.
+
+  also on the whole engine level, we use a list of orders, to test the engine works as expected.
+
+  
+### 3.2 Deployment
+
+We should deploy each engine instance in Docker on the cloud, or as a server-less service.
+
+Each engine instance is a consumer of Kafka stream which as the source of the orders, when order is processed they should be write into another Kafka stream or database.
+
+## 4. What's next
+
+* Load engine configuration from json
+  
+  we should be able to load a rule engine instance from a configuration, like json file, instead of do it with code like in main method.
+
+* Tree editing tools
+
+  we can provide a tree editing tool, so user can edit the configuration.
+
+* Reliability 
+
+  Since we deploy the solution to cloud, so we need to consider reliability patterns like retry, timeout etc, to make sure the system is resilient.
+
+* Monitoring
+
+  we should add more monitoring, like latency, so it be easy for us to locate the problem and for future improvement.
+
+* Other
+
+  As work load increase, we may have some other things need to improve in scalability, performance, resilience etc.
