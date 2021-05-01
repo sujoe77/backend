@@ -86,7 +86,7 @@
         <jol-core.version>0.10</jol-core.version>
         <asm.version>8.0.1</asm.version>
         <bcel.version>6.5.0</bcel.version>
-        <junit.version>4.13</junit.version>
+        <junit.version>4.13.1</junit.version>
         <commons-lang3.version>3.11</commons-lang3.version>
     </properties>
     <build>
