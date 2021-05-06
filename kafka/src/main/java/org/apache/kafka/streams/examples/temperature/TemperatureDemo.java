@@ -22,6 +22,7 @@ import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.streams.KafkaStreams;
 import org.apache.kafka.streams.StreamsBuilder;
 import org.apache.kafka.streams.StreamsConfig;
+import org.apache.kafka.streams.Topology;
 import org.apache.kafka.streams.kstream.KStream;
 import org.apache.kafka.streams.kstream.Produced;
 import org.apache.kafka.streams.kstream.TimeWindows;
@@ -36,26 +37,26 @@ import java.util.concurrent.CountDownLatch;
  * Demonstrates, using the high-level KStream DSL, how to implement an IoT demo application
  * which ingests temperature value processing the maximum value in the latest TEMPERATURE_WINDOW_SIZE seconds (which
  * is 5 seconds) sending a new message if it exceeds the TEMPERATURE_THRESHOLD (which is 20)
- *
+ * <p>
  * In this example, the input stream reads from a topic named "iot-temperature", where the values of messages
  * represent temperature values; using a TEMPERATURE_WINDOW_SIZE seconds "tumbling" window, the maximum value is processed and
  * sent to a topic named "iot-temperature-max" if it exceeds the TEMPERATURE_THRESHOLD.
- *
+ * <p>
  * Before running this example you must create the input topic for temperature values in the following way :
- *
+ * <p>
  * bin/kafka-topics.sh --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1 --topic iot-temperature
- *
+ * <p>
  * and at same time the output topic for filtered values :
- *
+ * <p>
  * bin/kafka-topics.sh --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1 --topic iot-temperature-max
- *
+ * <p>
  * After that, a console consumer can be started in order to read filtered values from the "iot-temperature-max" topic :
- *
+ * <p>
  * bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic iot-temperature-max --from-beginning
- *
+ * <p>
  * On the other side, a console producer can be used for sending temperature values (which needs to be integers)
  * to "iot-temperature" typing them on the console :
- *
+ * <p>
  * bin/kafka-console-producer.sh --broker-list localhost:9092 --topic iot-temperature
  * > 10
  * > 15
@@ -69,16 +70,12 @@ public class TemperatureDemo {
     private static final int TEMPERATURE_WINDOW_SIZE = 5;
 
     public static void main(final String[] args) {
+        startStreams(
+                new KafkaStreams(getTopology(), getProperties())
+        );
+    }
 
-        final Properties props = new Properties();
-        props.put(StreamsConfig.APPLICATION_ID_CONFIG, "streams-temperature");
-        props.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
-        props.put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, Serdes.String().getClass());
-        props.put(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, Serdes.String().getClass());
-
-        props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
-        props.put(StreamsConfig.CACHE_MAX_BYTES_BUFFERING_CONFIG, 0);
-
+    private static Topology getTopology() {
         final StreamsBuilder builder = new StreamsBuilder();
 
         final KStream<String, String> source = builder.stream("iot-temperature");
@@ -104,7 +101,22 @@ public class TemperatureDemo {
         // need to override key serde to Windowed<String> type
         max.to("iot-temperature-max", Produced.with(windowedSerde, Serdes.String()));
 
-        final KafkaStreams streams = new KafkaStreams(builder.build(), props);
+        return builder.build();
+    }
+
+    private static Properties getProperties() {
+        final Properties props = new Properties();
+        props.put(StreamsConfig.APPLICATION_ID_CONFIG, "streams-temperature");
+        props.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
+        props.put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, Serdes.String().getClass());
+        props.put(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, Serdes.String().getClass());
+
+        props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
+        props.put(StreamsConfig.CACHE_MAX_BYTES_BUFFERING_CONFIG, 0);
+        return props;
+    }
+
+    private static void startStreams(KafkaStreams streams) {
         final CountDownLatch latch = new CountDownLatch(1);
 
         // attach shutdown handler to catch control-c
