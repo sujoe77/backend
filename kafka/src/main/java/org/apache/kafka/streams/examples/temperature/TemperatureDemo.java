@@ -80,11 +80,13 @@ public class TemperatureDemo {
 
         final KStream<String, String> source = builder.stream("iot-temperature");
 
+        //todo all stream functions
         final KStream<Windowed<String>, String> max = source
                 // temperature values are sent without a key (null), so in order
                 // to group and reduce them, a key is needed ("temp" has been chosen)
                 .selectKey((key, value) -> "temp")
                 .groupByKey()
+                //todo, what are concepts and how to use windows
                 .windowedBy(TimeWindows.of(Duration.ofSeconds(TEMPERATURE_WINDOW_SIZE)))
                 .reduce((value1, value2) -> {
                     if (Integer.parseInt(value1) > Integer.parseInt(value2)) {
@@ -96,6 +98,7 @@ public class TemperatureDemo {
                 .toStream()
                 .filter((key, value) -> Integer.parseInt(value) > TEMPERATURE_THRESHOLD);
 
+        //todo how to use serde
         final Serde<Windowed<String>> windowedSerde = WindowedSerdes.timeWindowedSerdeFrom(String.class, TEMPERATURE_WINDOW_SIZE);
 
         // need to override key serde to Windowed<String> type
@@ -104,6 +107,7 @@ public class TemperatureDemo {
         return builder.build();
     }
 
+    //todo how to config?
     private static Properties getProperties() {
         final Properties props = new Properties();
         props.put(StreamsConfig.APPLICATION_ID_CONFIG, "streams-temperature");
