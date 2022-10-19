@@ -1,7 +1,7 @@
 package cutoff.jdbc;
 
 public class JdbcConfig {
-    public static final String JDBC_URL = "jdbc:postgresql://localhost:5432/mydb?user=postgres&password=postgres";;
+    public static final String JDBC_URL = "jdbc:postgresql://localhost:5432/mydb?user=postgres&password=postgres";
 
     private String instance;
     private String databaseName;

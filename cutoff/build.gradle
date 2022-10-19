@@ -1,9 +1,15 @@
 plugins {
-    id 'application'
+    id 'org.springframework.boot' version '2.6.12'
+    id 'io.spring.dependency-management' version '1.0.14.RELEASE'
+    id 'java'
 }
 
+group = 'cutoff'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '11'
+
 repositories {
-    jcenter()
+    mavenCentral()
 }
 
 dependencies {
@@ -23,10 +29,6 @@ dependencies {
     testImplementation  group: 'org.junit.jupiter',         name: 'junit-jupiter-params',         version: '5.9.0'
     testImplementation  group: 'org.mockito',               name: 'mockito-core',                 version: '4.7.0'
     testRuntimeOnly     group: 'org.junit.jupiter',         name: 'junit-jupiter-engine',         version: '5.9.0'
-}
-
-application {
-    mainClass = 'cutoff.Application'
 }
 
 test {
