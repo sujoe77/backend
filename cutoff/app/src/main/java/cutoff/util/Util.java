@@ -11,8 +11,4 @@ public class Util {
         String pair = base + "/" + term;
         return pair + "_" + dateTime.toLocalDate().toString();
     }
-
-    public static boolean isEmpty(String input){
-        return input == null || input.isEmpty();
-    }
 }
