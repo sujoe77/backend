@@ -3,10 +3,14 @@ package cutoff.model;
 import java.time.LocalDateTime;
 
 public class CurrencyCutoffTime {
-    private final String base;
-    private final LocalDateTime dateTime;
+    private String base;
+    private String dateTime;
 
-    public CurrencyCutoffTime(String base, LocalDateTime dateTime) {
+    public CurrencyCutoffTime(){
+        this("", LocalDateTime.now().toString());
+    }
+
+    public CurrencyCutoffTime(String base, String dateTime) {
         this.base = base;
         this.dateTime = dateTime;
     }
@@ -15,7 +19,15 @@ public class CurrencyCutoffTime {
         return base;
     }
 
-    public LocalDateTime getDateTime() {
+    public String getDateTime() {
         return dateTime;
+    }
+
+    @Override
+    public String toString() {
+        return "CurrencyCutoffTime{" +
+                "base='" + base + '\'' +
+                ", dateTime='" + dateTime + '\'' +
+                '}';
     }
 }

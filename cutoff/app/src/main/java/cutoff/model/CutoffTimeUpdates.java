@@ -1,9 +1,14 @@
 package cutoff.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class CutoffTimeUpdates {
-    private final List<CurrencyCutoffTime> updates;
+    private List<CurrencyCutoffTime> updates;
+
+    public CutoffTimeUpdates() {
+        this(new ArrayList<>());
+    }
 
     public CutoffTimeUpdates(List<CurrencyCutoffTime> updates) {
         this.updates = updates;

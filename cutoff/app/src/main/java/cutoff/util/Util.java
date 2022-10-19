@@ -1,7 +1,5 @@
 package cutoff.util;
 
-import cutoff.model.PairCutoffTime;
-
 import java.time.LocalDateTime;
 
 public class Util {
