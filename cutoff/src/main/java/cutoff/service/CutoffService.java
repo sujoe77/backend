@@ -16,6 +16,7 @@ import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 @Service
 public class CutoffService implements InitializingBean {
+    public static final String NOT_AVAILABLE = "Not available";
     private JdbcClient jdbcClient;
 
     @Override
@@ -31,7 +32,7 @@ public class CutoffService implements InitializingBean {
         if (isEmpty(ret)) {
             ret = getJdbcClient().getCutoffTime(pair.substring(0, 3), pair.substring(4), LocalDate.parse(date)).toString();
         }
-        return isEmpty(ret) ? "Not available" : ret;
+        return isEmpty(ret) ? NOT_AVAILABLE : ret;
     }
 
     public void setCutoffTime(List<CurrencyCutoffTime> currencyCutoffTime) throws SQLException {

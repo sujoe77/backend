@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.*;
 import java.sql.SQLException;
 import java.util.List;
 
+import static cutoff.service.CutoffService.NOT_AVAILABLE;
+
 @RestController
 @RequestMapping("/cutoff")
 public class CutoffController {
@@ -19,7 +21,9 @@ public class CutoffController {
 
     @GetMapping("")
     public ResponseEntity<String> getCutOff(@RequestParam String pair, @RequestParam String date) throws SQLException {
-        return new ResponseEntity<>(service.getCutoffTime(pair, date), HttpStatus.OK);
+        String body = service.getCutoffTime(pair, date);
+        HttpStatus status = NOT_AVAILABLE.equals(body) ? HttpStatus.NO_CONTENT : HttpStatus.OK;
+        return new ResponseEntity<>(body, status);
     }
 
     @PostMapping("")
