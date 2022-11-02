@@ -30,7 +30,7 @@ public class CutoffService implements InitializingBean {
             ret = CutoffTimeCache.CUTOFF_TIME_CACHE.get(getInverse(pair) + "_" + date);
         }
         if (isEmpty(ret)) {
-            ret = getJdbcClient().getCutoffTime(pair.substring(0, 3), pair.substring(4), LocalDate.parse(date)).toString();
+            ret = getJdbcClient().getCutoffTime(pair.substring(0, 3), pair.substring(4), LocalDate.parse(date));
         }
         return isEmpty(ret) ? NOT_AVAILABLE : ret;
     }

@@ -25,7 +25,7 @@ public class JdbcClient {
         this.config = config;
     }
 
-    public LocalTime getCutoffTime(String base, String term, LocalDate date) throws SQLException {
+    public String getCutoffTime(String base, String term, LocalDate date) throws SQLException {
         try (PreparedStatement stat = getConnection().prepareStatement(Constants.SQL_SELECT_CUTOFF_TIME)) {
             stat.setDate(1, Date.valueOf(date));
             stat.setString(2, base);
@@ -34,9 +34,9 @@ public class JdbcClient {
             stat.setString(5, base);
             ResultSet rs = stat.executeQuery();
             if (!rs.next()) {
-                return null;
+                return "";
             }
-            return rs.getTime(1).toLocalTime();
+            return rs.getTime(1).toLocalTime().toString();
         }
     }
 
