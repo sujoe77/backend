@@ -2,7 +2,7 @@ plugins {
     id 'java'
 }
 
-group = 'cutoff'
+group = 'xml-parser'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '11'
 
