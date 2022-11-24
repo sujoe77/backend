@@ -1,6 +1,7 @@
 package xml.parser.model;
 
-public interface Expression {
+import java.io.Serializable;
+
+public interface Expression extends Serializable {
     double calculate();
-    int getId();
 }
