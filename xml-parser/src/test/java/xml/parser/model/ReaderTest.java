@@ -24,13 +24,18 @@ public class ReaderTest {
     public void testRead() throws FileNotFoundException, XMLStreamException {
         XMLStreamReader streamReader = XmlStreamReader.initReader("src/test/resources/input/data01.xml");
         List<XmlEvent> ret = XmlParser.extractList(streamReader);
-        System.out.println(ret);
+        assertEquals(38, ret.size());
+        assertEquals(new XmlEvent(1, EventType.START_ELEMENT, "addition"), ret.get(0));
+        assertEquals(new XmlEvent(0, EventType.END_ELEMENT, "division"), ret.get(37));
     }
 
     @Test
     public void testRead2() throws FileNotFoundException, XMLStreamException {
         XMLStreamReader streamReader = XmlStreamReader.initReader("src/test/resources/input/data02.xml");
         List<XmlEvent> ret = XmlParser.extractList(streamReader);
+        assertEquals(89, ret.size());
+        assertEquals(new XmlEvent(10, EventType.START_ELEMENT, "addition"), ret.get(0));
+        assertEquals(new XmlEvent(0, EventType.END_ELEMENT, "division"), ret.get(88));
         System.out.println(ret);
     }
 
