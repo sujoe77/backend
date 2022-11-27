@@ -11,7 +11,7 @@ public enum CalculationType {
 
     public static CalculationType fromName(String name) {
         for (CalculationType type : values()) {
-            if (type.tagName.equals(name)) {
+            if (type.tagName.equalsIgnoreCase(name)) {
                 return type;
             }
         }

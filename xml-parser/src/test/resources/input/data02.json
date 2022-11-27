@@ -1,0 +1,119 @@
+[
+  {
+    "id": 10,
+    "type": "ADDITION",
+    "subExpressions": [
+      {
+        "number": 2.0
+      },
+      {
+        "number": 3.0
+      },
+      {
+        "id": 0,
+        "type": "SUBTRACTION",
+        "subExpressions": [
+          {
+            "number": 7.0
+          },
+          {
+            "number": 3.0
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 11,
+    "type": "SUBTRACTION",
+    "subExpressions": [
+      {
+        "number": 3.0
+      },
+      {
+        "number": 2.0
+      }
+    ]
+  },
+  {
+    "id": 12,
+    "type": "MULTIPLICATION",
+    "subExpressions": [
+      {
+        "number": 5.0
+      },
+      {
+        "number": 6.0
+      },
+      {
+        "number": 8.0
+      }
+    ]
+  },
+  {
+    "id": 13,
+    "type": "MULTIPLICATION",
+    "subExpressions": [
+      {
+        "id": 0,
+        "type": "ADDITION",
+        "subExpressions": [
+          {
+            "number": 2.0
+          },
+          {
+            "number": 3.0
+          },
+          {
+            "number": 4.0
+          }
+        ]
+      },
+      {
+        "number": 6.0
+      },
+      {
+        "id": 0,
+        "type": "MULTIPLICATION",
+        "subExpressions": [
+          {
+            "number": 3.0
+          },
+          {
+            "number": 4.0
+          },
+          {
+            "number": 5.0
+          },
+          {
+            "number": 10.0
+          },
+          {
+            "number": 56.0
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 14,
+    "type": "DIVISION",
+    "subExpressions": [
+      {
+        "number": 54.0
+      },
+      {
+        "id": 0,
+        "type": "ADDITION",
+        "subExpressions": [
+          {
+            "number": 3.0
+          },
+          {
+            "number": 6.0
+          }
+        ]
+      }
+    ]
+  }
+]
