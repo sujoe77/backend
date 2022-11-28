@@ -10,9 +10,7 @@ import xml.parser.model.xml.XmlEvent;
 
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import static javax.xml.stream.XMLStreamConstants.CHARACTERS;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
@@ -22,10 +20,10 @@ import static xml.parser.model.xml.EventType.START_ELEMENT;
 public class XmlParser {
     public static final String EXPRESSIONS = "expressions";
     private static Set<String> TAG_NAMES_FOR_NUMBER = Set.of(
-            "item", "minuend", "subtrahend", "factor", "dividend", "divisor"
+            "item", "minuend", "subtrahend", "factor", "dividend", "divisor", "base", "exponent"
     );
     static Set<String> TAG_NAMES_FOR_CALCULATION = Set.of(
-            "addition", "subtraction", "multiplication", "division"
+            "addition", "subtraction", "multiplication", "division", "power"
     );
 
     public static XMLCalculation getNextCalculation(XMLStreamReader streamReader) throws XMLStreamException {
@@ -109,6 +107,8 @@ public class XmlParser {
             return createDivision(xmlEvents, startIndex, endIndex, startEvent, type);
         } else if (type == CalculationType.ADDITION || type == CalculationType.MULTIPLICATION) {
             return createCalculation(xmlEvents, startIndex, endIndex, startEvent, type);
+        } else if (type == CalculationType.POWER) {
+            return createPower(xmlEvents, startIndex, endIndex, startEvent, type);
         }
         return null;
     }
@@ -141,6 +141,13 @@ public class XmlParser {
         Calculation ret = new Calculation(startEvent.getId(), type);
         ret.getSubExpressions().add(getNextExpression(xmlEvents, "minuend", startIndex + 1, endIndex));
         ret.getSubExpressions().add(getNextExpression(xmlEvents, "subtrahend", startIndex + 1, endIndex));
+        return ret;
+    }
+
+    private static Calculation createPower(List<XmlEvent> xmlEvents, int startIndex, int endIndex, XmlEvent startEvent, CalculationType type) {
+        Calculation ret = new Calculation(startEvent.getId(), type);
+        ret.getSubExpressions().add(getNextExpression(xmlEvents, "base", startIndex + 1, endIndex));
+        ret.getSubExpressions().add(getNextExpression(xmlEvents, "exponent", startIndex + 1, endIndex));
         return ret;
     }
 
@@ -234,10 +241,19 @@ public class XmlParser {
     }
 
     private static int getId(XMLStreamReader streamReader) {
-        return withIdAttribute(streamReader) ? Integer.parseInt(streamReader.getAttributeValue(0)) : 0;
+        Map<String, String> attributes = getAttributes(streamReader);
+        String ret = attributes.get("id");
+        return isEmpty(ret) ? 0 : Integer.parseInt(ret);
     }
 
-    private static boolean withIdAttribute(XMLStreamReader streamReader) {
-        return streamReader.getEventType() == XMLStreamReader.START_ELEMENT && streamReader.getAttributeCount() != 0;
+    private static Map<String, String> getAttributes(XMLStreamReader streamReader) {
+        Map<String, String> ret = new HashMap<>();
+        if (streamReader.getEventType() != XMLStreamReader.START_ELEMENT) {
+            return ret;
+        }
+        for (int i = 0; i < streamReader.getAttributeCount(); i++) {
+            ret.put(streamReader.getAttributeLocalName(i), streamReader.getAttributeValue(i));
+        }
+        return ret;
     }
 }

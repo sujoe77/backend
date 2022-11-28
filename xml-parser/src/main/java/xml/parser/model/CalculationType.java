@@ -1,7 +1,7 @@
 package xml.parser.model;
 
 public enum CalculationType {
-    ADDITION("addition"), SUBTRACTION("subtraction"), MULTIPLICATION("multiplication"), DIVISION("division");
+    ADDITION("addition"), SUBTRACTION("subtraction"), MULTIPLICATION("multiplication"), DIVISION("division"), POWER("power");
 
     private final String tagName;
 

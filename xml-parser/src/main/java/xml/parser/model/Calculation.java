@@ -30,6 +30,8 @@ public class Calculation implements Expression {
             return result.isEmpty() ? 1d : result.get();
         } else if (type == CalculationType.DIVISION) {
             return subExpressions.get(0).calculate() / subExpressions.get(1).calculate();
+        } else if (type == CalculationType.POWER) {
+            return Math.pow(subExpressions.get(0).calculate(), subExpressions.get(1).calculate());
         }
         throw new IllegalArgumentException();
     }

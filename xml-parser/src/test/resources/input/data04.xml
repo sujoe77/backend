@@ -1,0 +1,6 @@
+<expressions>
+    <power id="1">
+        <base>2</base>
+        <exponent>3</exponent>
+    </power>
+</expressions>
