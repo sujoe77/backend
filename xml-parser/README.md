@@ -72,9 +72,13 @@ new operations can be easily added with 2 steps
 1. add new deserialization in XmlParser
 2. add new operation in Calculation class
 
+please see new added <power> operation in data04.xml
+
 * New format
 
 new file format other than XML can be added via implement new Serializer and Deserialiazer interface.
+
+please see [MainJson](src/main/java/xml/parser/MainJson.java) for json format support.
 
 # Implementation
 
@@ -119,7 +123,8 @@ we have 2 unit test classes
 | --------------------------------- | ----------------------------------------- |
 | [xml.parser.model.ReaderTest](src/test/java/xml/parser/model/ReaderTest.java) | Test Xml can be read and deserialized correctly |
 | [xml.parser.model.CalculationTest](src/test/java/xml/parser/model/CalculationTest.java) | Test calculations |
-
+| [data03.xml](src/test/resources/input/data03.xml) | test deep operation |
+| [data04.xml](src/test/resources/input/data04.xml) | test power operation |
 
 
 # File list
