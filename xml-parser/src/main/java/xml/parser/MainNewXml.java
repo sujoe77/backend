@@ -51,13 +51,11 @@ public class MainNewXml {
                     } else if (e.getType() == CHARACTERS) {
                         stack.peek().getSubExpressions().add(new Number(Double.parseDouble(e.getText())));
                     } else if (e.getType() == EventType.END_ELEMENT && TAG_NAMES_FOR_CALCULATION.contains(e.getText())) {
-                        Calculation nextCal = stack.peek();
+                        Calculation nextCal = stack.pop();
                         double result = nextCal.calculate();
-                        if (stack.size() == 1) {
-                            stack.pop();
+                        if (stack.size() == 0) {
                             return new Result(nextCal.getId(), result);
                         } else {
-                            stack.pop();
                             stack.peek().getSubExpressions().add(new Number(result));
                         }
                     }
