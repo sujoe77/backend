@@ -1,6 +1,7 @@
-package xml.parser.io;
+package xml.parser.io.json;
 
 import com.google.gson.Gson;
+import xml.parser.io.Serializer;
 import xml.parser.model.Calculation;
 import xml.parser.model.Result;
 
@@ -14,7 +15,7 @@ public class JsonWriter implements Serializer<Stream<Calculation>, OutputStream>
     @Override
     public void serialize(Stream<Calculation> input, OutputStream output) {
         Gson gson = new Gson();
-        Collection<Result> list = input.map(e -> new Result(e.calculate())).collect(Collectors.toList());
+        Collection<Result> list = input.map(e -> new Result(e.getId(), e.calculate())).collect(Collectors.toList());
         try {
             output.write(gson.toJson(list).getBytes());
         } catch (IOException ex) {

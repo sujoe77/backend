@@ -1,12 +1,9 @@
 package xml.parser;
 
 import org.apache.commons.io.FileUtils;
-import xml.parser.io.JsonReader;
-import xml.parser.io.JsonWriter;
-import xml.parser.io.xml.XmlStreamReader;
-import xml.parser.io.xml.XmlStreamWriter;
+import xml.parser.io.json.JsonReader;
+import xml.parser.io.json.JsonWriter;
 import xml.parser.model.Calculation;
-import xml.parser.model.Expression;
 
 import java.io.File;
 import java.io.FileInputStream;

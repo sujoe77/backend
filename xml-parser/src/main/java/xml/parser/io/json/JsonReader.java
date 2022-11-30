@@ -1,9 +1,10 @@
-package xml.parser.io;
+package xml.parser.io.json;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import org.apache.commons.io.IOUtils;
+import xml.parser.io.Deserializer;
 import xml.parser.io.json.ExpressionAdapter;
 import xml.parser.model.Calculation;
 import xml.parser.model.Expression;

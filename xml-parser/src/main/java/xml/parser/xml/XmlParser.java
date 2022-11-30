@@ -19,10 +19,10 @@ import static xml.parser.model.xml.EventType.START_ELEMENT;
 
 public class XmlParser {
     public static final String EXPRESSIONS = "expressions";
-    private static Set<String> TAG_NAMES_FOR_NUMBER = Set.of(
+    public static Set<String> TAG_NAMES_FOR_NUMBER = Set.of(
             "item", "minuend", "subtrahend", "factor", "dividend", "divisor", "base", "exponent"
     );
-    static Set<String> TAG_NAMES_FOR_CALCULATION = Set.of(
+    public static Set<String> TAG_NAMES_FOR_CALCULATION = Set.of(
             "addition", "subtraction", "multiplication", "division", "power"
     );
 
@@ -208,7 +208,7 @@ public class XmlParser {
         return streamReader.getEventType() == XMLStreamReader.START_ELEMENT && !EXPRESSIONS.equals(streamReader.getLocalName());
     }
 
-    static boolean isText(XMLStreamReader streamReader) {
+    public static boolean isText(XMLStreamReader streamReader) {
         return streamReader.getEventType() == CHARACTERS && streamReader.hasText() && !streamReader.getText().trim().isEmpty();
     }
 
@@ -228,15 +228,15 @@ public class XmlParser {
         return nestLevel;
     }
 
-    private static XmlEvent getXmlEvent(XMLStreamReader streamReader) {
+    public static XmlEvent getXmlEvent(XMLStreamReader streamReader) {
         return new XmlEvent(getId(streamReader), EventType.fromInt(streamReader.getEventType()), getText(streamReader));
     }
 
-    private static String getText(XMLStreamReader streamReader) {
+    public static String getText(XMLStreamReader streamReader) {
         return streamReader.getEventType() == CHARACTERS ? streamReader.getText() : streamReader.getLocalName();
     }
 
-    private static boolean isEmptyText(XMLStreamReader streamReader) {
+    public static boolean isEmptyText(XMLStreamReader streamReader) {
         return streamReader.getEventType() == CHARACTERS && streamReader.getText().trim().isEmpty();
     }
 
@@ -246,7 +246,7 @@ public class XmlParser {
         return isEmpty(ret) ? 0 : Integer.parseInt(ret);
     }
 
-    private static Map<String, String> getAttributes(XMLStreamReader streamReader) {
+    public static Map<String, String> getAttributes(XMLStreamReader streamReader) {
         Map<String, String> ret = new HashMap<>();
         if (streamReader.getEventType() != XMLStreamReader.START_ELEMENT) {
             return ret;
