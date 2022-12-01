@@ -12,7 +12,6 @@ import java.util.stream.Stream;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class XmlEventStreamReaderTest {
-
     @Test
     void deserialize() throws FileNotFoundException {
         XmlEventStreamReader xmlEVentStreamReader = new XmlEventStreamReader();
