@@ -9,6 +9,7 @@ import javax.xml.stream.XMLStreamReader;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.Iterator;
+import java.util.Objects;
 import java.util.Spliterator;
 import java.util.Spliterators;
 import java.util.stream.Stream;
@@ -27,7 +28,7 @@ public class XmlEventStreamReader implements Deserializer<InputStream, Stream<Xm
             Stream<XmlEvent> stream = StreamSupport.stream(
                     Spliterators.spliteratorUnknownSize(iterator, Spliterator.ORDERED), false
             );
-            return stream;
+            return stream.filter(Objects::nonNull);
         } catch (XMLStreamException | FileNotFoundException e) {
             throw new RuntimeException(e);
         }

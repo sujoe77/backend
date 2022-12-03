@@ -39,7 +39,6 @@ public class MainNewXml {
             throw new RuntimeException(e);
         }
     }
-
     public static Stream<Result> parseAndCalculate(Stream<XmlEvent> xmlEventStream) {
         Stack<Calculation> stack = new Stack<>();
         return xmlEventStream
