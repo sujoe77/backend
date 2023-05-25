@@ -1,6 +1,7 @@
 https://coolshell.cn/articles/17416.html
 
-更新缓存的的Design Pattern有四种：
+There are 4 commonly used cache updating patterns:
+
 * Cache aside, 
 * Read through, 
 * Write through, 
@@ -10,8 +11,8 @@ https://coolshell.cn/articles/17416.html
 
 * read, cache hit
 * read, cache miss
-* write cache hit
-* write cache miss
+* write, cache hit
+* write, cache miss
 
 2 threads
 
@@ -27,7 +28,7 @@ How to update cache and DB
 
 * the order
 * when to update
-* which thread
+* who, which thread
 
 # Cache aside
 
@@ -35,9 +36,9 @@ How to update cache and DB
 
 At the beginning, cache is just a piece of memory, driven by client thread.
 
-in order to maintain the consistency between DB and cache, we need to know if cache is consistent with DB, instead of comparing it every time, we introduce a boolean to represent if cache is up to date.
+In order to maintain the consistency between DB and cache, we need to know if cache is consistent with DB, instead of comparing it every time, we introduce a boolean flag to represent if cache is up to date, so called cache hit.
 
-How to update, if we write cache first, we may lost changes, DB is still the main store of the data, so we update DB first, cache later.
+Regarding how to update, if we write cache first, we may lose changes, DB is still the main store of the data, so we update DB first, cache later.
 
 after DB updated, if object is not in cache, we do nothing. if object in cache already, instead of update cache immediately, we just update the flag to invalidate the cache, which is cheaper.
 
@@ -82,6 +83,8 @@ As described in the article, a problem may occure like below:
 Read / Write through use server side thread to update cache, avoid concurrency problem.
 
 read through is similar to cache aside, the difference is cache thread update cache and DB.
+
+![](img/read-through.png)
 
 # Write through
 
