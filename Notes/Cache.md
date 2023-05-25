@@ -75,6 +75,10 @@ when a cache reading coming, which meets cache invalid, the client thread will r
 As described in the article, a problem may occure like below:
 
 
+## see also
+
+There is a paper "Scaling Memcache at Facebook" [3] and question on Quora [4].
+
 
 # Read through
 
@@ -111,7 +115,13 @@ article on coolshell https://coolshell.cn/articles/17416.html
 
 6.824 cache consistency
 
-Facebook paper
+3. Facebook paper
+
+    https://research.facebook.com/publications/scaling-memcache-at-facebook/
+
+4. Why does Facebook use delete to remove the key-value pair in Memcached instead of updating the Memcached during write request to the backend?
+
+    https://www.quora.com/Why-does-Facebook-use-delete-to-remove-the-key-value-pair-in-Memcached-instead-of-updating-the-Memcached-during-write-request-to-the-backend
 
 Quora question
 
