@@ -2,10 +2,10 @@ https://coolshell.cn/articles/17416.html
 
 There are 4 commonly used cache updating patterns:
 
-* Cache aside, 
-* Read through, 
-* Write through, 
-* Write behind caching
+* Cache aside 
+* Read through 
+* Write through 
+* Write behind (back)
 
 4 scenarios (state, if see it as a state machine) to handle, write back mode has more.
 
@@ -36,13 +36,19 @@ How to update cache and DB
 
 At the beginning, cache is just a piece of memory, driven by client thread.
 
-In order to maintain the consistency between DB and cache, we need to know if cache is consistent with DB, instead of comparing it every time, we introduce a boolean flag to represent if cache is up to date, so called cache hit.
+* the flag
 
-Regarding how to update, if we write cache first, we may lose changes, DB is still the main store of the data, so we update DB first, cache later.
+    In order to maintain the consistency between DB and cache, we need to know if cache is consistent with DB, instead of comparing it every time, we introduce a boolean flag to represent if data is in cache, so called cache hit.
 
-after DB updated, if object is not in cache, we do nothing. if object in cache already, instead of update cache immediately, we just update the flag to invalidate the cache, which is cheaper.
+* update DB
 
-when a cache reading coming, which meets cache invalid, the client thread will read DB first, and write to cache.
+    Regarding how to update, if we write cache first, we may lose changes, DB is still the main store of the data, so we update DB first, cache later.
+
+    after DB updated, if object is not in cache, we do nothing. if object in cache already, instead of update cache immediately, we just update the flag to invalidate the cache, which is cheaper, and according to Quora[4], can avoid some concurrency problem.
+
+* update cache
+
+    when a cache reading coming, which meets cache invalid, the client thread will read DB first, and write to cache.
 
 
 ![](img/cache_aside.png)
@@ -74,13 +80,14 @@ when a cache reading coming, which meets cache invalid, the client thread will r
 
 As described in the article, a problem may occure like below:
 
-
 ## see also
 
 There is a paper "Scaling Memcache at Facebook" [3] and question on Quora [4].
 
 
 # Read through
+
+Instead of a piece of shared memory, in this pattern, we make cache a service.
 
 "Cache aside" use client thread to update cache, may have concurrency issues.
 
@@ -94,7 +101,7 @@ read through is similar to cache aside, the difference is cache thread update ca
 
 S2 is same with read through.
 
-*S3 update Cache, then DB
+*S3 update Cache first, then DB
 
     this is faster then read through, but with weaker consistency
 
@@ -104,29 +111,41 @@ S4 update DB only
 
 # Write back
 
-more complex, update cache only, update DB async. in batch
+according to [5a], initially, writing is done only to the cache. The write to the backing store is postponed until the modified content is about to be replaced by another cache block.
+
+more complex, update cache only, update DB async. in batch.
+
+we introduced one flag here, if data is dirty, i.e. in cache , not in DB yet.
+
+so each of 4 scenarios before splite into 2, dirty or not dirty.
 
 ![](img/write_back.png)
 
 
+see also [5c]
+
 # Ref
 
-article on coolshell https://coolshell.cn/articles/17416.html
+1. article on coolshell https://coolshell.cn/articles/17416.html
 
-6.824 cache consistency
+2. 6.824 cache consistency
 
+    notes: https://pdos.csail.mit.edu/6.824/notes/l-frangipani.txt
+    video: https://youtu.be/jPrUxfIcWWs
+    paper: https://pdos.csail.mit.edu/6.824/papers/thekkath-frangipani.pdf
+    
 3. Facebook paper
 
     https://research.facebook.com/publications/scaling-memcache-at-facebook/
 
-4. Why does Facebook use delete to remove the key-value pair in Memcached instead of updating the Memcached during write request to the backend?
+4. Quora, Why does Facebook use delete to remove the key-value pair in Memcached instead of updating the Memcached during write request to the backend?
 
     https://www.quora.com/Why-does-Facebook-use-delete-to-remove-the-key-value-pair-in-Memcached-instead-of-updating-the-Memcached-during-write-request-to-the-backend
 
-Quora question
+5. Cache wikipedia
 
-Cache wikipedia
+    a. https://en.wikipedia.org/wiki/Cache_(computing)
 
-    https://en.wikipedia.org/wiki/Cache_(computing)
+    b. https://en.wikipedia.org/wiki/Cache_coherence
 
-    https://en.wikipedia.org/wiki/Cache_coherence
+    c. https://en.wikipedia.org/wiki/Page_cache
