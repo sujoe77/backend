@@ -39,21 +39,22 @@ public class MainNewXml {
             throw new RuntimeException(e);
         }
     }
-
     public static Stream<Result> parseAndCalculate(Stream<XmlEvent> xmlEventStream) {
         Stack<Calculation> stack = new Stack<>();
         return xmlEventStream
                 .filter(Objects::nonNull)
                 .map(e -> {
-                    if (e.getType() == EventType.START_ELEMENT && TAG_NAMES_FOR_CALCULATION.contains(e.getText())) {
-                        Calculation cal = new Calculation(e.getId(), CalculationType.fromName(e.getText()));
+                    EventType type = e.getType();
+                    String text = e.getText();
+                    if (type == EventType.START_ELEMENT && TAG_NAMES_FOR_CALCULATION.contains(text)) {
+                        Calculation cal = new Calculation(e.getId(), CalculationType.fromName(text));
                         stack.push(cal);
-                    } else if (e.getType() == CHARACTERS) {
-                        stack.peek().getSubExpressions().add(new Number(Double.parseDouble(e.getText())));
-                    } else if (e.getType() == EventType.END_ELEMENT && TAG_NAMES_FOR_CALCULATION.contains(e.getText())) {
+                    } else if (type == CHARACTERS) {
+                        stack.peek().getSubExpressions().add(new Number(Double.parseDouble(text)));
+                    } else if (type == EventType.END_ELEMENT && TAG_NAMES_FOR_CALCULATION.contains(text)) {
                         Calculation nextCal = stack.pop();
                         double result = nextCal.calculate();
-                        if (stack.size() == 0) {
+                        if (stack.isEmpty()) {
                             return new Result(nextCal.getId(), result);
                         } else {
                             stack.peek().getSubExpressions().add(new Number(result));

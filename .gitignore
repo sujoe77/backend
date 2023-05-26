@@ -17,3 +17,5 @@ cutoff/*.txt
 
 /**/.gradle
 /**/.classpath
+/**/.DS_Store
+/**/bak
