@@ -130,9 +130,11 @@ see also [5c]
 
 2. 6.824 cache consistency
 
-    notes: https://pdos.csail.mit.edu/6.824/notes/l-frangipani.txt
-    video: https://youtu.be/jPrUxfIcWWs
-    paper: https://pdos.csail.mit.edu/6.824/papers/thekkath-frangipani.pdf
+    a. notes: https://pdos.csail.mit.edu/6.824/notes/l-frangipani.txt
+
+    b. video: https://youtu.be/jPrUxfIcWWs
+
+    c. paper: https://pdos.csail.mit.edu/6.824/papers/thekkath-frangipani.pdf
     
 3. Facebook paper
 
