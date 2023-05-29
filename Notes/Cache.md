@@ -73,12 +73,12 @@ At the beginning, cache is just a piece of memory, driven by client thread.
 * a typical error
 * How it works
 * paper of Facebook, question on Quora
-* potencial problem
+* potential problem
     - how to avoid
 
 ## A potential concurrency issue
 
-As described in the article, a problem may occure like below:
+As described in the article, a problem may occur like below:
 
 ## see also
 
@@ -117,12 +117,17 @@ more complex, update cache only, update DB async. in batch.
 
 we introduced one flag here, if data is dirty, i.e. in cache , not in DB yet.
 
-so each of 4 scenarios before splite into 2, dirty or not dirty.
+so each of 4 scenarios before split into 2, dirty or not dirty.
 
 ![](img/write_back.png)
 
 
 see also [5c]
+
+# Summary
+
+Author mentioned principles in computer design could be used in IT system architecture.
+for example cache, data pipelines etc. please refer to book "Computer Organization and Design: The Hardware/Software Interface"[6].
 
 # Ref
 
@@ -151,3 +156,14 @@ see also [5c]
     b. https://en.wikipedia.org/wiki/Cache_coherence
 
     c. https://en.wikipedia.org/wiki/Page_cache
+
+6. Computer Organization and Design: The Hardware/Software Interface
+
+    https://www.amazon.com/Computer-Organization-Design-MIPS-Architecture/dp/0124077269
+
+    
+7. other
+
+    a beginner guide o cache sync.
+
+    https://vladmihalcea.com/a-beginners-guide-to-cache-synchronization-strategies/
