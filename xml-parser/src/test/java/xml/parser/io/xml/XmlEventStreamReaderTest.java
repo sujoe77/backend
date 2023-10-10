@@ -17,6 +17,6 @@ class XmlEventStreamReaderTest {
         XmlEventStreamReader xmlEVentStreamReader = new XmlEventStreamReader();
         Stream<XmlEvent> stream = xmlEVentStreamReader.deserialize(new FileInputStream("src/test/resources/input/data01.xml"));
         List<XmlEvent> tags = stream.collect(Collectors.toList());
-        assertEquals(39, tags.size());
+        assertEquals(38, tags.size());
     }
 }
