@@ -7,6 +7,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -31,6 +32,18 @@ public class IPC_Test {
     public void givenGetUsingQuery_whenCalled_shouldReturnResult() {
         LongValue key = Values.newHeapInstance(LongValue.class);
         StringBuilder country = new StringBuilder();
+        List<String> countries = List.of(
+                "Romania", "India", "China"
+        );
+        long value = 0;
+        for(String countryExpected : countries){
+            key.setValue(++value);
+            persistedCountryMap.getUsing(key, country);
+            assertEquals(countryExpected, country.toString());
+        }
+    }
+
+    private static void printLatency(LongValue key) {
         int i = 0;
         key.setValue(1);
         final int length = 100;
@@ -40,14 +53,8 @@ public class IPC_Test {
             persistedCountryMap.get(key);
             latency[i++] = System.nanoTime() - start;
         }
-        for(long duration : latency){
+        for (long duration : latency) {
             System.out.println(duration);
         }
-        assertEquals(country.toString(), "Romania");
-        key.setValue(2);
-        persistedCountryMap.getUsing(key, country);
-        assertEquals(country.toString(), "India");
-        key.setValue(3);
-        System.out.println(country.toString());
     }
 }
