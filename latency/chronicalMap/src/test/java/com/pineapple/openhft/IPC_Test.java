@@ -29,14 +29,27 @@ public class IPC_Test {
     }
 
     @Test
+    public void putValues() {
+        List<String> countries = List.of(
+                "Denmark", "Finland", "Norway"
+        );
+        long i = 4;
+        LongValue key = Values.newHeapInstance(LongValue.class);
+        for (String country : countries) {
+            key.setValue(i++);
+            persistedCountryMap.put(key, country);
+        }
+    }
+
+    @Test
     public void givenGetUsingQuery_whenCalled_shouldReturnResult() {
         LongValue key = Values.newHeapInstance(LongValue.class);
         StringBuilder country = new StringBuilder();
         List<String> countries = List.of(
-                "Romania", "India", "China"
+                "Romania", "India", "China", "Denmark", "Finland", "Norway"
         );
         long value = 0;
-        for(String countryExpected : countries){
+        for (String countryExpected : countries) {
             key.setValue(++value);
             persistedCountryMap.getUsing(key, country);
             assertEquals(countryExpected, country.toString());
