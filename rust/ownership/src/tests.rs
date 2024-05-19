@@ -7,8 +7,17 @@ mod tests {
     }
 }
 
+mod ownership {
+    use crate::str_funcs::*;
+
+    #[test]
+    fn test_ownership(){
+
+    }
+}
+
 mod str {
-    use crate::strFuncs::*;
+    use crate::str_funcs::*;
 
     #[test]
     fn test_take(){

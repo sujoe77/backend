@@ -19,3 +19,4 @@ cutoff/*.txt
 /**/.classpath
 /**/.DS_Store
 /**/bak
+/**/.vscode

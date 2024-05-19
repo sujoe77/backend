@@ -1,0 +1,1 @@
+for strut with generic types , can define implement methods or not, depends on generic types
