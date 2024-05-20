@@ -6,10 +6,12 @@ use std::{
     path::Path,
 };
 
-fn main() {
+fn print_str() {
     let s = String::from("shit");
+    let s2 = String::from("shit");
     let s1 = s;
-    println("string is {}", s2);
+    assert_eq!(s1, s2);
+    println!("string is {}", s1);
 }
 
 //Rust steam
@@ -24,4 +26,13 @@ fn lines_from_file(filename: impl AsRef<Path>) -> io::Result<Vec<String>> {
 
 fn calculate_length(s: &String) -> usize {
     s.len()
+}
+
+mod some_func_tests {
+    use crate::some_func::print_str;
+
+    #[test]
+    fn test_print_str() {
+        print_str();
+    }
 }

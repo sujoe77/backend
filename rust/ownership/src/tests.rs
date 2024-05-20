@@ -1,9 +1,25 @@
 #[cfg(test)]
 mod tests {
+    use crate::my_struct::Rectangle;
+
     #[test]
     fn it_works() {
         let result = 2 + 2;
         assert_eq!(result, 4);
+    }
+
+    #[test]
+    fn test_rectangle() {
+        let scale = 2.0;
+        let rect1 = Rectangle {
+            width: dbg!(30.0 * scale),
+            height: 50.0,
+        };
+    
+        print!("{}", rect1.area());
+        print!("{}", Rectangle::area2(3.0, 15.0)); //call associated
+    
+        dbg!(&rect1);
     }
 }
 
@@ -56,4 +72,5 @@ mod str {
         print!("{}", sp);
         print!("{}", sp_mutable);
     }
+    
 }

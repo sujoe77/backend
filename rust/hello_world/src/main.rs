@@ -1,6 +1,7 @@
 use std::fs::read_to_string;
 use sujoe_lib::add;
 use str_func::*;
+use math_func::*;
 
 pub mod str_func;
 

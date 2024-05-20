@@ -1,3 +1,5 @@
+#[path = "./math_func.rs"] mod math_func;
+
 use regex::Regex;
 
 pub fn regex_func(){
@@ -7,4 +9,10 @@ pub fn regex_func(){
 
 pub fn show_text(){
     println!("show_text is called!");
+}
+
+pub fn show_maty(){
+    let a :u32 = 1;
+    let b :u32 = 2;
+    println!("{}", math_func::add(a, b))
 }
