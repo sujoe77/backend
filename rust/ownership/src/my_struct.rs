@@ -1,35 +1,37 @@
 #[derive(Debug)]
-struct Rectangle {
-    width: u32,
-    height: u32,
+pub struct Rectangle {
+    pub width: f32,
+    pub height: f32,
 }
 
 impl Rectangle {
-    fn area(&self) -> u32 {
+    pub fn area(&self) -> f32 {
         self.width * self.height
     }
 
-    /* not compile, overloading not allowed 
-    fn area(w: f32, h: f32) -> f32 {
-        w * h
+    pub fn perimeter(&self) -> f32 {
+        (self.width + self.height) * 2.0
     }
-    */
 
-    //without self, associated method
-    fn area2(w: f32, h: f32) -> f32 {
+    pub fn area2(w: f32, h: f32) -> f32 {
         w * h
     }
 }
 
-fn main() {
-    let scale = 2;
-    let rect1 = Rectangle {
-        width: dbg!(30 * scale),
-        height: 50,
+#[test]
+fn test_area() {
+    let r = Rectangle {
+        width: 4.0,
+        height: 8.0,
     };
+    assert_eq!(r.area(), 32.0);
+}
 
-    print!("{}", rect1.area());
-    print!("{}", Rectangle::area2(3.0, 15.0)); //call associated
-
-    dbg!(&rect1);
+#[test]
+fn test_perimeter() {
+    let r = Rectangle {
+        width: 4.0,
+        height: 8.0,
+    };
+    assert_eq!(dbg!(r.perimeter()), 24.0);
 }
