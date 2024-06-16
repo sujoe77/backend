@@ -1,8 +1,8 @@
 use std::fs::read_to_string;
-use str_func::*;
-use sujoe_lib::add;
 use math_func::*;
+use str_func::*;
 
+pub mod math_func;
 pub mod str_func;
 
 fn main() {

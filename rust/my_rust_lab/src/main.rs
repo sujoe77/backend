@@ -11,9 +11,9 @@ fn main() {
     let folder = "/media/zhou/DATA/Backup/Mint_Backup/Downloads/doc";
 
     let s = String::from("abc");
-    let s_slice: &str = &s;
+    let _s_slice: &str = &s;
     let a1: u8 = 3;
-    let a: *const u8 = &a1;
+    let _a: *const u8 = &a1;
 
     //tuple can not loop
     let name_tuple = [
@@ -59,6 +59,6 @@ fn lines_from_file(filename: impl AsRef<Path>) -> io::Result<Vec<String>> {
         .collect()
 }
 
-fn calculate_length(s: &String) -> usize {
+fn _calculate_length(s: &String) -> usize {
     s.len()
 }

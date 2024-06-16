@@ -1,0 +1,9 @@
+[workspace]
+
+members = [ "demo",
+    "hello_world",
+    "my_rust_lab",
+    "ownership",
+    "sujoe_lib",
+    "demo"
+]
