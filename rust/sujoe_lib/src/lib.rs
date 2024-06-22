@@ -1,4 +1,4 @@
-use core::num;
+use std::collections::HashSet;
 
 pub mod tests;
 
@@ -11,42 +11,42 @@ pub fn minus(left: usize, right: usize) -> usize {
 }
 
 pub fn football_group_match() {
+    let mut cases: HashSet<String> = HashSet::new();
+
     //AB, AC, AD, BC, BD, CD
-    for i in 0..216 {
-        let array = int_to_array(i);
-        let mut team_scores = [0, 0, 0, 0];
+    for i in 0..3_i32.pow(6) {
+        let mut team_scores: [i32; 4] = [0; 4];
+        let results = int_to_array(i);
         for k in 0..6 {
-            if k < 3 {
-                if array[k] == 2 {
-                    team_scores[0] += 3;
-                } else if array[k] == 1 {
-                    team_scores[0] += 1;
-                    team_scores[k + 1] += 1;
-                } else {
-                    team_scores[k + 1] += 3;
-                }
-            } else if k < 5 {
-                if array[k] == 1 {
-                    team_scores[1] += 3;
-                } else if array[k] == 0 {
-                    team_scores[1] += 1;
-                    team_scores[k - 1] += 1;
-                } else {
-                    team_scores[k - 1] += 3;
-                }
-            } else {
-                if array[k] == 1 {
-                    team_scores[2] += 3;
-                } else if array[k] == 0 {
-                    team_scores[2] += 1;
-                    team_scores[3] += 1;
-                } else {
-                    team_scores[3] += 3;
-                }
-            }
+            set_team_score(results[k], &mut team_scores, get_team_index(k));
         }
-        print!("{:?}", array);
-        print!("{:?}\n", team_scores);
+        print!("{:?}, {:?}\n", results, team_scores);
+        team_scores.sort();
+        cases.insert(format!("{:?}", team_scores));
+    }
+
+    print!("size is {}\n", cases.len());
+    print!("{:?}\n", cases);
+}
+
+fn get_team_index(k: usize) -> [usize; 2] {
+    if k < 3 {
+        return [0, k + 1];
+    } else if k < 5 {
+        return [1, k - 1];
+    } else {
+        return [2, 3];
+    }
+}
+
+fn set_team_score(result: i32, team_scores: &mut [i32; 4], index: [usize; 2]) {
+    if result == 2 {
+        team_scores[index[0]] += 3;
+    } else if result == 1 {
+        team_scores[index[0]] += 1;
+        team_scores[index[1]] += 1;
+    } else {
+        team_scores[index[1]] += 3;
     }
 }
 
