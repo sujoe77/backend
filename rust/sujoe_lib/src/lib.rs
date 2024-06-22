@@ -1,4 +1,4 @@
-use std::collections::HashSet;
+use std::collections::HashMap;
 
 pub mod tests;
 
@@ -10,8 +10,8 @@ pub fn minus(left: usize, right: usize) -> usize {
     left - right
 }
 
-pub fn football_group_match() {
-    let mut cases: HashSet<String> = HashSet::new();
+pub fn football_group_match() -> HashMap<String, i32> {
+    let mut cases: HashMap<String, i32> = HashMap::new();
 
     //AB, AC, AD, BC, BD, CD
     for i in 0..3_i32.pow(6) {
@@ -22,11 +22,25 @@ pub fn football_group_match() {
         }
         print!("{:?}, {:?}\n", results, team_scores);
         team_scores.sort();
-        cases.insert(format!("{:?}", team_scores));
+        let key_str = format!("{:?}", team_scores);
+        //let key= key_str.as_str();
+        if cases.contains_key(&key_str) {
+            let v = cases.get(&key_str).unwrap() + 1;
+            cases.insert(key_str, v);
+        } else {
+            cases.insert(key_str, 1);
+        }
     }
 
     print!("size is {}\n", cases.len());
     print!("{:?}\n", cases);
+    let mut count = 0;
+    cases.values().for_each(|c| {
+        count += c;
+    });
+    print!("total count {}", count);
+    cases
+    //print!("{}\n", s);
 }
 
 fn get_team_index(k: usize) -> [usize; 2] {
