@@ -12,11 +12,10 @@ pub fn minus(left: usize, right: usize) -> usize {
 
 pub fn football_group_match() -> HashMap<String, i32> {
     let mut cases: HashMap<String, i32> = HashMap::new();
-    let mut team_scores: [i32; 4] = [0; 4];
 
     //AB, AC, AD, BC, BD, CD
     for i in 0..3_i32.pow(6) {
-        team_scores = [0; 4];
+        let mut team_scores = [0; 4];
         let results = int_to_array(i);
         for k in 0..6 {
             set_team_score(results[k], &mut team_scores, get_team_index(k));
@@ -58,8 +57,8 @@ fn set_team_score(result: i32, team_scores: &mut [i32; 4], index: [usize; 2]) {
         1 => {
             team_scores[index[0]] += 1;
             team_scores[index[1]] += 1;
-        },
-        _ => team_scores[index[1]] += 3
+        }
+        _ => team_scores[index[1]] += 3,
     }
 }
 
