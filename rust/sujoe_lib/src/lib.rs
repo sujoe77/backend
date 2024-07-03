@@ -45,23 +45,21 @@ pub fn football_group_match() -> HashMap<String, i32> {
 }
 
 fn get_team_index(k: usize) -> [usize; 2] {
-    if k < 3 {
-        return [0, k + 1];
-    } else if k < 5 {
-        return [1, k - 1];
-    } else {
-        return [2, 3];
+    match k {
+        ..=2_usize => [0, k + 1],
+        3..=4_usize => [1, k - 1],
+        _ => [2, 3],
     }
 }
 
 fn set_team_score(result: i32, team_scores: &mut [i32; 4], index: [usize; 2]) {
-    if result == 2 {
-        team_scores[index[0]] += 3;
-    } else if result == 1 {
-        team_scores[index[0]] += 1;
-        team_scores[index[1]] += 1;
-    } else {
-        team_scores[index[1]] += 3;
+    match result {
+        2 => team_scores[index[0]] += 3,
+        1 => {
+            team_scores[index[0]] += 1;
+            team_scores[index[1]] += 1;
+        },
+        _ => team_scores[index[1]] += 3
     }
 }
 

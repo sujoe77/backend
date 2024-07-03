@@ -19,6 +19,18 @@ fn test_football_group_match() {
 }
 
 #[test]
+fn test_get_team_index() {
+    let mut k = 2;
+    assert_eq!(get_team_index(k), [0, 3]);
+
+    k = 4;
+    assert_eq!(get_team_index(k), [1, 3]);
+
+    k = 5;
+    assert_eq!(get_team_index(k), [2, 3]);
+}
+
+#[test]
 fn test_int_to_array() {
     let mut array = int_to_array(0);
     assert_eq!(array, [0, 0, 0, 0, 0, 0]);
