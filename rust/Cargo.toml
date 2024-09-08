@@ -3,10 +3,9 @@ name="my_rust"
 version = "0.1.0"
 edition = "2021"
 
-members = [ "demo",
+members = [
     "hello_world",
     "my_rust_lab",
     "ownership",
-    "sujoe_lib",
-    "demo"
+    "sujoe_lib"
 ]

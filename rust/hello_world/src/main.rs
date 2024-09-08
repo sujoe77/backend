@@ -8,7 +8,7 @@ pub mod str_func;
 fn main() {
     println!("Hello, world!?");
 
-    let file_name = "./text.txt";
+    let file_name = "./hello_world/text.txt";
     let lines = read_lines(&file_name);
     println!("{}", file_name);
     for line in lines {

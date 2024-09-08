@@ -7,5 +7,5 @@ edition = "2021"
 
 [dependencies]
 time = "0.3.36"
-regex = "1.10.4"
+regex = "1.10.6"
 sujoe_lib = {path = "../sujoe_lib"}
