@@ -32,3 +32,6 @@ A typical Rust package structure like:
 
     from: https://doc.rust-lang.org/cargo/guide/project-layout.html
 
+see also modules cheat sheet:
+
+    https://doc.rust-lang.org/book/ch07-02-defining-modules-to-control-scope-and-privacy.html
