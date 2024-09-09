@@ -6,6 +6,8 @@ use std::{
     path::Path,
 };
 
+use sujoe_lib::io::*;
+
 fn main() {
     // --snip--
     let folder = "/media/zhou/DATA/Backup/Mint_Backup/Downloads/doc";
@@ -35,7 +37,7 @@ fn get_all_sql(index_files: [String; 2]) -> String {
         let resource_type = get_resource_type(file);
         let lines = lines_from_file(file).expect("Could not load lines");
         for line in lines {
-            let insert = get_insert(resource_type, line);            
+            let insert = get_insert(resource_type, line);
             sql.push_str(&insert);
         }
     }
@@ -59,18 +61,4 @@ fn get_resource_type(file: &String) -> &str {
         resource_type = "paper";
     }
     resource_type
-}
-
-//Rust stream
-//impl
-//Result
-fn lines_from_file(filename: impl AsRef<Path>) -> io::Result<Vec<String>> {
-    BufReader::new(File::open(filename)?)
-        .lines()
-        .filter(|p| !(p.as_ref().unwrap()).contains("109"))
-        .collect()
-}
-
-fn _calculate_length(s: &String) -> usize {
-    s.len()
 }

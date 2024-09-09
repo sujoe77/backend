@@ -1,6 +1,7 @@
-#[path = "./math_func.rs"] mod math_func;
+#[path = "../math/mod.rs"] mod math;
 
 use regex::Regex;
+use math::add;
 
 pub fn regex_func(){
     let re = Regex::new(r"^\d{4}-\d{2}-\d{2}$").unwrap();
@@ -14,5 +15,5 @@ pub fn show_text(){
 pub fn show_maty(){
     let a :u32 = 1;
     let b :u32 = 2;
-    println!("{}", math_func::add(a, b))
+    println!("{}", add(a, b))
 }

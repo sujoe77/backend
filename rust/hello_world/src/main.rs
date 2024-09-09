@@ -1,33 +1,14 @@
-use std::fs::read_to_string;
-use math_func::*;
-use str_func::*;
+use sujoe_lib::*;
 
-pub mod math_func;
-pub mod str_func;
+const FILE_NAME: &str = "./hello_world/text.txt";
 
 fn main() {
     println!("Hello, world!?");
 
-    let file_name = "./hello_world/text.txt";
-    let lines = read_lines(&file_name);
-    println!("{}", file_name);
-    for line in lines {
-        println!("{}", line);
-    }
+    io::read_lines(&FILE_NAME);
 
-    regex_func();
-    show_text();
+    str::regex_func();
+    str::show_text();
 
-    let r = add(1, 2);
-    println!("{}", r);
-}
-
-fn read_lines(filename: &str) -> Vec<String> {
-    let mut result = Vec::new();
-
-    for line in read_to_string(filename).unwrap().lines() {
-        result.push(line.to_string())
-    }
-
-    result
+    println!("{}", math::add(1, 2));
 }
