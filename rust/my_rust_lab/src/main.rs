@@ -16,22 +16,22 @@ fn main() {
     let _a: *const u8 = &a1;
 
     //tuple can not loop
-    let name_tuple = [
+    let index_files = [
         format!("{}{}", folder, "/Book/index_book.txt"),
         format!("{}{}", folder, "/paper/index_paper.txt"),
     ];
 
     //String vs &str
-    let sql = get_all_sql(name_tuple);
+    let sql = get_all_sql(index_files);
     //expect
     //write file
     fs::write(format!("{}{}", folder, "/Book/insert_resources.sql"), sql)
         .expect("Unable to write file");
 }
 
-fn get_all_sql(name_tuple: [String; 2]) -> String {
+fn get_all_sql(index_files: [String; 2]) -> String {
     let mut sql = String::from("");
-    for file in name_tuple.iter() {
+    for file in index_files.iter() {
         let resource_type = get_resource_type(file);
         let lines = lines_from_file(file).expect("Could not load lines");
         for line in lines {
@@ -44,12 +44,12 @@ fn get_all_sql(name_tuple: [String; 2]) -> String {
 
 fn get_insert(resource_type: &str, line: String) -> String {
     //format string
-    let sql1 = format!(
+    let insert = format!(
         "insert into resources(format, keywords, path) values (\'{}\', \'{}\', \'{}\');\n",
         resource_type, "", line
     );
-    print!("{}", &sql1);
-    sql1
+    print!("{}", &insert);
+    insert
 }
 
 fn get_resource_type(file: &String) -> &str {
