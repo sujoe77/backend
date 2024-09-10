@@ -1,5 +1,4 @@
 use std::{
-    fs,
     fs::File,
     io::{self, BufRead, BufReader},
     iter::Iterator,
