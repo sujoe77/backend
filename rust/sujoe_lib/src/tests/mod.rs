@@ -1,5 +1,4 @@
 #[cfg(test)]
-
 use super::football::*;
 use super::math::*;
 
@@ -51,4 +50,10 @@ fn test_int_to_array() {
 
     array = int_to_array(100);
     assert_eq!(array, [0, 1, 0, 2, 0, 1]);
+}
+
+#[test]
+fn test_add() {
+    let result = add(1, 3);
+    assert_eq!(result, 4);
 }
