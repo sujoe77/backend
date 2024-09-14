@@ -1,5 +1,4 @@
 mod my_struct;
-mod some_func;
 
 #[cfg(test)]
 mod tests {
