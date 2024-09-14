@@ -20,3 +20,4 @@ cutoff/*.txt
 /**/.DS_Store
 /**/bak
 /**/.vscode
+/**/Cargo.lock
