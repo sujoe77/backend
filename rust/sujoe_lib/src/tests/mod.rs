@@ -1,6 +1,7 @@
+mod math;
+
 #[cfg(test)]
 use super::football::*;
-//use super::math::*;
 
 #[test]
 fn it_works() {

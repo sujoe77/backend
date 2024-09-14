@@ -1,7 +1,4 @@
-#[path = "../math/mod.rs"]
-mod math;
-
-use math::add;
+use crate::math::add;
 use regex::Regex;
 
 pub fn regex_func() {
