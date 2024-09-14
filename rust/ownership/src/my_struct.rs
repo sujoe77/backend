@@ -17,21 +17,3 @@ impl Rectangle {
         w * h
     }
 }
-
-#[test]
-fn test_area() {
-    let r = Rectangle {
-        width: 4.0,
-        height: 8.0,
-    };
-    assert_eq!(r.area(), 32.0);
-}
-
-#[test]
-fn test_perimeter() {
-    let r = Rectangle {
-        width: 4.0,
-        height: 8.0,
-    };
-    assert_eq!(dbg!(r.perimeter()), 24.0);
-}

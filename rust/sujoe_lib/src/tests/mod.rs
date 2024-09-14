@@ -1,15 +1,17 @@
 #[cfg(test)]
 use super::football::*;
-use super::math::*;
+//use super::math::*;
 
 #[test]
 fn it_works() {
+    use super::math::add;
     let result = add(2, 2);
     assert_eq!(result, 4);
 }
 
 #[test]
 fn test_minus() {
+    use super::math::minus;
     let result = minus(5, 4);
     assert_eq!(result, 1)
 }
@@ -54,6 +56,7 @@ fn test_int_to_array() {
 
 #[test]
 fn test_add() {
+    use super::math::add;
     let result = add(1, 3);
     assert_eq!(result, 4);
 }

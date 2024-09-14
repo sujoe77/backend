@@ -1,3 +1,6 @@
+mod my_struct;
+mod some_func;
+
 #[cfg(test)]
 mod tests {
     use crate::my_struct::Rectangle;
@@ -15,38 +18,38 @@ mod tests {
             width: dbg!(30.0 * scale),
             height: 50.0,
         };
-    
+
         print!("{}", rect1.area());
         print!("{}", Rectangle::area2(3.0, 15.0)); //call associated
-    
+
         dbg!(&rect1);
     }
 }
 
 mod ownership {
-    use crate::str_funcs::*;
 
     #[test]
-    fn test_ownership(){
-
-    }
+    fn test_ownership() {}
 }
 
 mod str {
-    use crate::str_funcs::*;
 
     #[test]
-    fn test_take(){
+    fn test_take() {
+        use crate::rust_ownership::take;
+
         let s = String::from("value");
         let mut mutable_s = String::from("value2");
         take(s);
         //println!("s is {}", s); //can not compile
-        take(mutable_s);        
+        take(mutable_s);
     }
 
     #[test]
-    fn test_take_mutable(){
-        let s = String::from("value");
+    fn test_take_mutable() {
+        use crate::rust_ownership::take_mutable;
+
+        let _s = String::from("value");
         let mut mutable_s = String::from("value2");
 
         //takeMutable(&mut s); does not compile, s is immutable
@@ -56,7 +59,9 @@ mod str {
     }
 
     #[test]
-    fn test_take_share(){
+    fn test_take_share() {
+        use crate::rust_ownership::take_share;
+
         let s = String::from("value");
         let mut s_mutable = String::from("value2");
         let sp = &String::from("value");
@@ -72,5 +77,4 @@ mod str {
         print!("{}", sp);
         print!("{}", sp_mutable);
     }
-    
 }
