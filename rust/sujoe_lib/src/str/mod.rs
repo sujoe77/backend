@@ -17,3 +17,11 @@ pub fn show_maty(){
     let b :u32 = 2;
     println!("{}", add(a, b))
 }
+
+pub fn print_str() {
+    let s = String::from("shit");
+    let s2 = String::from("shit");
+    let s1 = s;
+    assert_eq!(s1, s2);
+    println!("string is {}", s1);
+}
