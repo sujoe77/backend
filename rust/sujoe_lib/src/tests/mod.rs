@@ -1,4 +1,6 @@
+mod io;
 mod math;
+mod str;
 
 #[cfg(test)]
 use super::football::*;

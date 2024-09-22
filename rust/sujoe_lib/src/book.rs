@@ -1,6 +1,32 @@
 use super::io::*;
+use std::fs;
 
-pub fn get_all_sql(index_files: [String; 2]) -> String {
+pub const FOLDER: &str = "/media/zhou/DATA/Backup/Mint_Backup/Downloads/doc";
+
+pub fn generate_book_sql() {
+    let s = String::from("abc");
+    let a1: u8 = 3;
+
+    let _s_slice: &str = &s;
+    //convert String to &str
+    let _a: *const u8 = &a1;
+
+    //tuple can not loop
+
+    //String vs &str
+    let sql = get_all_sql();
+    //expect
+    //write file
+    let path = get_path();
+
+    fs::write(path, sql).expect("Unable to write file");
+}
+
+pub fn get_all_sql() -> String {
+    let index_files = [
+        format!("{}{}", FOLDER, "/Book/index_book.txt"),
+        format!("{}{}", FOLDER, "/paper/index_paper.txt"),
+    ];
     let mut sql = String::from("");
     for file in index_files.iter() {
         let resource_type = get_resource_type(file);
@@ -11,6 +37,10 @@ pub fn get_all_sql(index_files: [String; 2]) -> String {
         }
     }
     sql
+}
+
+pub fn get_path() -> String {
+    format!("{}{}", FOLDER, "/Book/insert_resources.sql")
 }
 
 pub fn get_insert(resource_type: &str, line: String) -> String {
