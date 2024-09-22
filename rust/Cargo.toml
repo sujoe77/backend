@@ -2,7 +2,6 @@
 resolver = "2"
 
 members = [
-    "hello_world",
     "my_rust_lab",
     "ownership",
     "sujoe_lib"

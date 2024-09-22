@@ -23,9 +23,3 @@ pub fn print_str() {
     assert_eq!(s1, s2);
     println!("string is {}", s1);
 }
-
-#[test]
-fn test_print_str() {
-    use crate::str::print_str;
-    print_str();
-}
