@@ -1,5 +1,7 @@
 mod io;
 mod math;
+mod my_struct;
+mod rust_ownership;
 mod str;
 
 #[cfg(test)]
