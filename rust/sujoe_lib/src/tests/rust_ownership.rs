@@ -1,6 +1,5 @@
-use crate::rust_ownership::*;
-
 #[test]
+#[allow(unused_mut)]
 fn test_take_share() {
     use crate::rust_ownership::take_share;
 
@@ -21,6 +20,7 @@ fn test_take_share() {
 }
 
 #[test]
+#[allow(unused_mut)]
 fn test_take() {
     use crate::rust_ownership::take;
 
@@ -46,6 +46,7 @@ fn test_take_mutable() {
 
 #[test]
 fn test_change() {
+    use crate::rust_ownership::{change, pass_ref};
     let mut s = String::from("str");
     change(&mut s);
     s.push_str("s");
@@ -60,6 +61,7 @@ fn test_change() {
 
 #[test]
 fn test_pass_ref() {
+    use crate::rust_ownership::pass_ref;
     let str = String::from("hello");
     let str2 = str;
     let str2_ref = &str2;
@@ -70,6 +72,7 @@ fn test_pass_ref() {
 
 #[test]
 fn test_takes_and_gives_back() {
+    use crate::rust_ownership::takes_and_gives_back;
     let str = String::from("hello");
     let str2 = takes_and_gives_back(str);
     //print!("{}", str);  this failed
@@ -78,15 +81,18 @@ fn test_takes_and_gives_back() {
 
 #[test]
 fn test_copy_init() {
+    use crate::rust_ownership::copy_int;
     copy_int();
 }
 
 #[test]
 fn test_clone_str() {
+    use crate::rust_ownership::clone_str;
     clone_str();
 }
 
 #[test]
 pub fn test_use_after_assign() {
+    use crate::rust_ownership::use_after_assign;
     use_after_assign();
 }

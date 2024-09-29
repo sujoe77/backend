@@ -1,3 +1,5 @@
+#[allow(dead_code)]
+
 const FILE_NAME: &str = "./src/tests/text.txt";
 
 #[test]
