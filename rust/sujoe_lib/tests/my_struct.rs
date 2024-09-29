@@ -1,8 +1,8 @@
 #[cfg(test)]
 #[test]
 fn test_area() {
-    use crate::my_struct::Rectangle;
-    use crate::my_struct::Shape;
+    use sujoe_lib::my_struct::Rectangle;
+    use sujoe_lib::my_struct::Shape;
 
     let r = Rectangle {
         width: 4.0,
@@ -13,8 +13,8 @@ fn test_area() {
 
 #[test]
 fn test_perimeter() {
-    use crate::my_struct::Rectangle;
-    use crate::my_struct::Shape;
+    use sujoe_lib::my_struct::Rectangle;
+    use sujoe_lib::my_struct::Shape;
 
     let r = Rectangle {
         width: 4.0,
@@ -31,8 +31,8 @@ fn it_works() {
 
 #[test]
 fn test_rectangle() {
-    use crate::my_struct::Rectangle;
-    use crate::my_struct::Shape;
+    use sujoe_lib::my_struct::Rectangle;
+    use sujoe_lib::my_struct::Shape;
 
     let scale = 2.0;
     let rect1 = Rectangle {
