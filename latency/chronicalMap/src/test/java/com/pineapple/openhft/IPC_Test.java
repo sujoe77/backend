@@ -1,7 +1,5 @@
 package com.pineapple.openhft;
 
-import static com.pineapple.openhft.SharedMap.COUNTRY_DETAILS;
-
 import net.openhft.chronicle.core.values.LongValue;
 import net.openhft.chronicle.map.ChronicleMap;
 import net.openhft.chronicle.values.Values;
@@ -11,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import java.io.File;
 import java.util.List;
 
+import static com.pineapple.openhft.SharedMap.COUNTRY_DETAILS;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class IPC_Test {
