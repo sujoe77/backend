@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 public class SharedMap {
+    public static final String COUNTRY_DETAILS = /*System.getProperty("user.home") +*/ "data/country-details.dat";
     private static ChronicleMap<LongValue, CharSequence> persistedCountryMap = null;
 
     public static void main(String[] args) throws InterruptedException, IOException {
@@ -39,7 +40,7 @@ public class SharedMap {
                 .name("country-map")
                 .entries(50)
                 .averageValue("America")
-                .createPersistedTo(new File(System.getProperty("user.home") + "/country-details.dat"));
+                .createPersistedTo(new File(COUNTRY_DETAILS));
         LongValue key = Values.newHeapInstance(LongValue.class);
         key.setValue(1);
         persistedCountryMap.put(key, "Romania");

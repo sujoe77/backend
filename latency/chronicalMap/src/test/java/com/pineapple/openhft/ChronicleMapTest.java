@@ -1,5 +1,7 @@
 package com.pineapple.openhft;
 
+import static com.pineapple.openhft.SharedMap.COUNTRY_DETAILS;
+
 import net.openhft.chronicle.core.values.LongValue;
 import net.openhft.chronicle.map.ChronicleMap;
 import net.openhft.chronicle.map.ExternalMapQueryContext;
@@ -39,7 +41,7 @@ public class ChronicleMapTest {
                     .name("country-map")
                     .entries(50)
                     .averageValue("America")
-                    .createPersistedTo(new File(System.getProperty("user.home") + "/country-details.dat"));
+                    .createPersistedTo(new File(COUNTRY_DETAILS));
 
             Set<Integer> averageValue = IntStream.of(1, 2)
                     .boxed()

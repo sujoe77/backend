@@ -1,5 +1,7 @@
 package com.pineapple.openhft;
 
+import static com.pineapple.openhft.SharedMap.COUNTRY_DETAILS;
+
 import net.openhft.chronicle.core.values.LongValue;
 import net.openhft.chronicle.map.ChronicleMap;
 import net.openhft.chronicle.values.Values;
@@ -22,7 +24,7 @@ public class IPC_Test {
                     .name("country-map")
                     .entries(50)
                     .averageValue("America")
-                    .createPersistedTo(new File(System.getProperty("user.home") + "/country-details.dat"));
+                    .createPersistedTo(new File(COUNTRY_DETAILS));
         } catch (Exception e) {
             e.printStackTrace();
         }
