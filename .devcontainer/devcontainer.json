@@ -25,7 +25,8 @@
 				"streetsidesoftware.code-spell-checker",
 				"GitHub.vscode-github-actions",
 				"ms-vsliveshare.vsliveshare",
-				"vadimcn.vscode-lldb"
+				"vadimcn.vscode-lldb",
+				"vscjava.vscode-gradle"
 			]
 		}
 	}
