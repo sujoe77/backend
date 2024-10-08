@@ -22,7 +22,7 @@ tasks.named<Test>("test") {
         "--add-exports=java.base/java.lang.reflect=ALL-UNNAMED",
         "--add-exports=java.base/sun.nio.ch=ALL-UNNAMED",
         "--add-opens=java.base/java.lang=ALL-UNNAMED",
-        "--add-exports=jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED",
+        "--add-exports=jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED"
     )
     useJUnitPlatform()
 }
