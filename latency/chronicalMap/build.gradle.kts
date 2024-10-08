@@ -17,7 +17,6 @@ dependencies {
 
 tasks.named<Test>("test") {
     jvmArgs(
-        "-Xmx1536M",
         "--add-opens=java.base/java.lang.reflect=ALL-UNNAMED",
         "--add-exports=java.base/java.lang.reflect=ALL-UNNAMED",
         "--add-exports=java.base/sun.nio.ch=ALL-UNNAMED",
