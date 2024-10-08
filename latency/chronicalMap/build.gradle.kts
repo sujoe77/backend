@@ -10,12 +10,12 @@ repositories {
 }
 
 dependencies {
-    // https://mvnrepository.com/artifact/net.openhft/chronicle-map
-    implementation("net.openhft:chronicle-map:3.21ea81")
-    testImplementation ("org.junit.jupiter:junit-jupiter-api:5.7.0")
-    testRuntimeOnly( "org.junit.jupiter:junit-jupiter-engine:5.7.0")
+    implementation("net.openhft:chronicle-map:3.26ea4")
+    testImplementation ("org.junit.jupiter:junit-jupiter-api:5.11.2")
+    testRuntimeOnly( "org.junit.jupiter:junit-jupiter-engine:5.11.2")    
 }
 
 tasks.named<Test>("test") {
+    //jvmArgs("-Xmx1536M --add-opens=java.base/java.lang.reflect=ALL-UNNAMED --add-exports=java.base/java.lang.reflect=ALL-UNNAMED")
     useJUnitPlatform()
 }
