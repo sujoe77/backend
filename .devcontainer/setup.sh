@@ -1,6 +1,8 @@
 ## update and install some things we should probably have
-mkdir /usr/local/sdkman/candidates/java
-ln -s /usr/lib/jvm/msopenjdk-current /usr/local/sdkman/candidates/java/current
-
-#cd /workspaces/backend
-#git pull
+if [ -e /usr/local/sdkman/candidates/java ]
+then
+    echo "skip creating java home link!"
+else
+    mkdir /usr/local/sdkman/candidates/java
+    ln -s /usr/lib/jvm/msopenjdk-current /usr/local/sdkman/candidates/java/current
+fi
