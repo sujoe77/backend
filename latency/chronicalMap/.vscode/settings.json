@@ -8,5 +8,6 @@
             "--add-opens=java.base/java.lang=ALL-UNNAMED",
             "--add-exports=jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED"
         ]
-    }
+    },
+    "java.jdt.ls.java.home": "/usr/lib/jvm/msopenjdk-current"
 }
