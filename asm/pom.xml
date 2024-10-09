@@ -10,12 +10,6 @@
     <name>asm</name>
     <packaging>jar</packaging>
 
-    <parent>
-        <groupId>com.baeldung</groupId>
-        <artifactId>parent-modules</artifactId>
-        <version>1.0.0-SNAPSHOT</version>
-    </parent>
-
     <dependencies>
         <dependency>
             <groupId>org.ow2.asm</groupId>
@@ -49,8 +43,10 @@
     </build>
 
     <properties>
-        <asm.version>5.2</asm.version>
-        <maven-jar-plugin.version>2.4</maven-jar-plugin.version>
+        <asm.version>9.7.1</asm.version>
+        <maven-jar-plugin.version>3.4.2</maven-jar-plugin.version>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
     </properties>
 
 </project>
