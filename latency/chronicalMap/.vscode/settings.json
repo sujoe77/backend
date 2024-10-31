@@ -9,5 +9,5 @@
             "--add-exports=jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED"
         ]
     },
-    "java.jdt.ls.java.home": "/usr/lib/jvm/msopenjdk-current"
+    "java.jdt.ls.java.home": "/home/zhou/jdk-17.0.9"
 }
