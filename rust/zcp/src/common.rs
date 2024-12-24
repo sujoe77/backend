@@ -1,4 +1,4 @@
-use std::net::{Ipv4Addr, SocketAddrV4};
+use std::net::Ipv4Addr;
 
 pub fn to_number(input: &str) -> u16 {
     input.parse().unwrap()
