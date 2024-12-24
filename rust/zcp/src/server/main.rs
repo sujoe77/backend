@@ -1,16 +1,23 @@
+use std::env;
 use std::io::{Read, Write};
 use std::net::Shutdown;
 use std::net::{Ipv4Addr, SocketAddrV4};
 use std::net::{TcpListener, TcpStream};
 use std::thread;
 
+use zcp::common::{to_ip, to_number};
+
 // const ADDR: Ipv4Addr = Ipv4Addr::LOCALHOST;
-const ADDR: Ipv4Addr = Ipv4Addr::new(192, 168, 0, 116);
-const PORT: u16 = 8000;
+//const ADDR: Ipv4Addr = Ipv4Addr::new(192, 168, 0, 116);
+//const PORT: u16 = 8000;
 
 fn main() {
+    let args: Vec<String> = env::args().collect();
+    println!("args is {}, {}, {}", args[0], args[1], args[2]);
+    let ip: Ipv4Addr = to_ip("0.0.0.0");
+    let port = to_number(&args[2]);
     println!("Hello from Server!");
-    let listener = TcpListener::bind(SocketAddrV4::new(ADDR, PORT)).unwrap();
+    let listener = TcpListener::bind(SocketAddrV4::new(ip, port)).unwrap();
 
     println!("{:?}", listener);
 
