@@ -19,6 +19,9 @@ rustup component add rustfmt --toolchain nightly
 rustup component add clippy 
 rustup component add clippy --toolchain nightly
 
+rustup self update
+rustup update
+
 cargo install cargo-expand
 cargo install cargo-edit
 
