@@ -23,7 +23,7 @@ fn main() {
 
     for stream in listener.incoming() {
         match stream {
-            Ok(mut stream) => {
+            Ok(stream) => {
                 println!("New connection: {}", stream.peer_addr().unwrap());
                 thread::spawn(move || {
                     // connection succeeded
