@@ -37,7 +37,6 @@ pub fn change(some_string: &mut String) {
     some_string.push_str(", world");
 }
 
-
 pub fn take(a_string: String) {
     println!("got str: {}", a_string);
 }
