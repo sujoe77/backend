@@ -1,4 +1,6 @@
-use std::net::Ipv4Addr;
+use std::io::{Read, Write};
+use std::net::Shutdown;
+use std::net::{Ipv4Addr, TcpStream};
 
 pub fn to_number(input: &str) -> u16 {
     input.parse().unwrap()
@@ -17,4 +19,23 @@ pub fn to_ip(input: &str) -> Ipv4Addr {
         to_u8(collection[2]),
         to_u8(collection[3]),
     )
+}
+
+fn handle_client(mut stream: TcpStream) {
+    let mut data = [0 as u8; 60]; // using 50 byte buffer
+    while match stream.read(&mut data) {
+        Ok(size) => {
+            // echo everything!
+            stream.write(&data[0..size]).unwrap();
+            true
+        }
+        Err(_) => {
+            println!(
+                "An error occurred, terminating connection with {}",
+                stream.peer_addr().unwrap()
+            );
+            stream.shutdown(Shutdown::Both).unwrap();
+            false
+        }
+    } {}
 }

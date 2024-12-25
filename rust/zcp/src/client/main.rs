@@ -1,10 +1,11 @@
 use std::env::args;
-use std::io::Write;
+use std::io::{Read, Write};
 use std::net::Shutdown;
 use std::net::TcpStream;
 use std::net::{Ipv4Addr, SocketAddrV4};
+use std::str::from_utf8;
 
-const ADDR: Ipv4Addr = Ipv4Addr::new(192, 168, 0, 116);
+const ADDR: Ipv4Addr = Ipv4Addr::new(192, 168, 50, 98);
 const PORT: u16 = 8000;
 
 fn main() -> std::io::Result<()> {
@@ -22,7 +23,9 @@ fn main() -> std::io::Result<()> {
             _ => {
                 print!("SENT!");
                 stream.write(&message.into_bytes())?;
-                //stream.read(&mut [0; 128])?;
+                let mut data = [0 as u8; 60];
+                stream.read(&mut data)?;
+                println!("got from server: {:?}", from_utf8(&data))
             }
         }
     } else {
