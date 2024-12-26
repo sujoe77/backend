@@ -10,41 +10,13 @@ const ADDR: Ipv4Addr = Ipv4Addr::new(192, 168, 50, 98);
 const PORT: u16 = 8000;
 
 fn main() -> std::io::Result<()> {
-    println!("Hello Client!");
-
-    if let Ok(mut stream) = TcpStream::connect(SocketAddrV4::new(ADDR, PORT)) {
+    if let Ok(stream) = TcpStream::connect(SocketAddrV4::new(ADDR, PORT)) {
         println!(
             "Connected to the server on {:?}",
             stream.peer_addr().unwrap()
         );
-
-        //let message = args().nth(1).expect("Please provide message!");
-        loop {
-            let message = read_stdin();
-            match message.as_str() {
-                "#END#" => {
-                    break;
-                }
-                _ => {
-                    stream.write(&message.into_bytes())?;
-                }
-            }
-            //let mut data = [0 as u8; 1024]; // using 50 byte buffer
-            read_stream(
-                &stream,
-                |data, size| {
-                    println!("got {:?} bytes from server: {:?}", size, from_utf8(&data));
-                    true
-                },
-                |ts| {
-                    println!(
-                        "An error occurred, terminating connection with {}",
-                        ts.peer_addr().unwrap()
-                    );
-                    ts.shutdown(Shutdown::Both).unwrap();
-                    true
-                },
-            );
+        while handle_input(&stream) {
+            read_from_server(&stream);
         }
         stream.shutdown(Shutdown::Both).expect("Shutdown Failed!");
     } else {
@@ -52,4 +24,39 @@ fn main() -> std::io::Result<()> {
     }
 
     Ok(())
+}
+
+fn handle_input(mut stream: &TcpStream) -> bool {
+    println!("--------- start reading from stdin");
+    let message = read_stdin();
+    println!("--------- got {:?} from stdin", message);
+    match message.as_str() {
+        "#END#\n" => false,
+        _ => {
+            let _ = stream.write(&message.into_bytes());
+            true
+        }
+    }
+}
+
+fn read_from_server(stream: &TcpStream) {
+    read_stream(
+        stream,
+        |data, size| {
+            println!(
+                "got {:?} bytes from server: {:?}",
+                size,
+                from_utf8(&data[0..size]).unwrap()
+            );
+            true
+        },
+        |ts| {
+            println!(
+                "An error occurred, terminating connection with {}",
+                ts.peer_addr().unwrap()
+            );
+            ts.shutdown(Shutdown::Both).unwrap();
+            true
+        },
+    );
 }
