@@ -1,8 +1,6 @@
-use std::io::{Read, Write};
+use std::io::{self, Read};
 use std::net::Shutdown;
 use std::net::{Ipv4Addr, TcpStream};
-
-use futures::future::ok;
 
 pub fn to_number(input: &str) -> u16 {
     input.parse().unwrap()
@@ -23,17 +21,21 @@ pub fn to_ip(input: &str) -> Ipv4Addr {
     )
 }
 
-fn read_stream(mut stream: TcpStream, ok_fn: fn([u8; 60]) -> bool, err_fn: fn()) {
-    let mut data = [0 as u8; 60]; // using 50 byte buffer
+pub fn read_stream(
+    mut stream: &TcpStream,
+    ok_fn: fn([u8; 1024], usize) -> bool,
+    err_fn: fn(&TcpStream) -> bool,
+) {
+    let mut data = [0 as u8; 1024]; // using 50 byte buffer
     while match stream.read(&mut data) {
         Ok(size) => {
             // echo everything!
-            ok_fn(data)
+            ok_fn(data, size)
             //stream.write(&data[0..size]).unwrap();
             //true
         }
         Err(_) => {
-            err_fn();
+            err_fn(&stream);
             println!(
                 "An error occurred, terminating connection with {}",
                 stream.peer_addr().unwrap()
@@ -42,4 +44,10 @@ fn read_stream(mut stream: TcpStream, ok_fn: fn([u8; 60]) -> bool, err_fn: fn())
             false
         }
     } {}
+}
+
+pub fn read_stdin() -> String {
+    let mut buffer = String::new();
+    let _ = io::stdin().read_line(&mut buffer);
+    buffer
 }
