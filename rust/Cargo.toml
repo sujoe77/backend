@@ -4,7 +4,6 @@ resolver = "2"
 
 members = [
     "my_rust_lab",
-    "ownership",
     "sujoe_lib",
     "zcp"
 ]
