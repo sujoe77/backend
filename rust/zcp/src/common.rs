@@ -1,8 +1,9 @@
 use std::io::{self, Read};
 use std::net::Shutdown;
 use std::net::{Ipv4Addr, TcpStream};
+use std::str::from_utf8;
 
-const BUFFER_SIZE: usize = 1024;
+pub const BUFFER_SIZE: usize = 1024;
 
 pub fn to_number(input: &str) -> u16 {
     input.parse().unwrap()
@@ -55,4 +56,22 @@ pub fn read_stdin() -> String {
     let mut buffer = String::new();
     let _ = io::stdin().read_line(&mut buffer);
     buffer
+}
+
+pub fn print_bytes(data: [u8; BUFFER_SIZE], size: usize) -> bool {
+    println!(
+        "got {:?} bytes from server: {:?}",
+        size,
+        from_utf8(&data[0..size]).unwrap()
+    );
+    true
+}
+
+pub fn handle_stream_err(ts: &TcpStream) -> bool {
+    println!(
+        "An error occurred, terminating connection with {:?}",
+        ts.peer_addr().unwrap()
+    );
+    ts.shutdown(Shutdown::Both).unwrap();
+    true
 }
