@@ -1,5 +1,5 @@
 use std::env;
-use std::io::{self, Read};
+use std::io::{self, Read, Write};
 use std::net::Shutdown;
 use std::net::{Ipv4Addr, TcpStream};
 use std::str::from_utf8;
@@ -29,30 +29,26 @@ pub fn to_ip(input: &str) -> Ipv4Addr {
 
 pub fn read_stream(
     mut stream: &TcpStream,
-    ok_fn: fn([u8; BUFFER_SIZE], usize) -> bool,
-    err_fn: fn(&TcpStream) -> bool,
+    ok_fn: fn(&TcpStream, [u8; BUFFER_SIZE], usize) -> bool,
+    err_fn: fn(&TcpStream),
 ) {
     let mut data = [0 as u8; BUFFER_SIZE];
     while match stream.read(&mut data) {
-        Ok(size) => {
-            println!("read size {:?}", size);
-            ok_fn(data, size);
-            if size < BUFFER_SIZE {
-                false
-            } else {
-                true
-            }
-        }
+        Ok(size) => ok_fn(stream, data, size),
         Err(_) => {
             err_fn(&stream);
-            println!(
-                "An error occurred, terminating connection with {}",
-                stream.peer_addr().unwrap()
-            );
-            stream.shutdown(Shutdown::Both).unwrap();
+            shutdown_stream(stream);
             false
         }
     } {}
+}
+
+fn shutdown_stream(stream: &TcpStream) {
+    println!(
+        "An error occurred, terminating connection with {}",
+        stream.peer_addr().unwrap()
+    );
+    stream.shutdown(Shutdown::Both).unwrap();
 }
 
 pub fn read_stdin() -> String {
@@ -61,22 +57,13 @@ pub fn read_stdin() -> String {
     buffer
 }
 
-pub fn print_bytes(data: [u8; BUFFER_SIZE], size: usize) -> bool {
+pub fn print_bytes(_stream: &TcpStream, data: [u8; BUFFER_SIZE], size: usize) -> bool {
     println!(
         "got {:?} bytes from server: {:?}",
         size,
         from_utf8(&data[0..size]).unwrap()
     );
-    true
-}
-
-pub fn handle_stream_err(ts: &TcpStream) -> bool {
-    println!(
-        "An error occurred, terminating connection with {:?}",
-        ts.peer_addr().unwrap()
-    );
-    ts.shutdown(Shutdown::Both).unwrap();
-    true
+    size >= BUFFER_SIZE
 }
 
 pub fn get_ip_port() -> (Ipv4Addr, u16) {
@@ -86,4 +73,9 @@ pub fn get_ip_port() -> (Ipv4Addr, u16) {
     let port = to_number(&args[2]);
     println!("Hello from Server: {:?}:{:?}", ip, port);
     (ip, port)
+}
+
+pub fn write_stream(mut stream: &TcpStream, data: [u8; BUFFER_SIZE], size: usize) -> bool {
+    stream.write(&data[0..size]).unwrap();
+    true
 }
