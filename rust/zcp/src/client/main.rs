@@ -1,11 +1,10 @@
 use std::io::Write;
 use std::net::Shutdown;
+use std::net::SocketAddrV4;
 use std::net::TcpStream;
-use std::net::{Ipv4Addr, SocketAddrV4};
+use zcp::common::ADDR;
+use zcp::common::PORT;
 use zcp::common::{handle_stream_err, print_bytes, read_stdin, read_stream};
-
-const ADDR: Ipv4Addr = Ipv4Addr::new(192, 168, 50, 98);
-const PORT: u16 = 8000;
 
 fn main() -> std::io::Result<()> {
     if let Ok(stream) = TcpStream::connect(SocketAddrV4::new(ADDR, PORT)) {
@@ -25,9 +24,7 @@ fn main() -> std::io::Result<()> {
 }
 
 fn handle_input(mut stream: &TcpStream) -> bool {
-    //println!("--------- start reading from stdin");
     let message = read_stdin();
-    //println!("--------- got {:?} from stdin", message);
     match message.as_str() {
         "#END#\n" => false,
         _ => {

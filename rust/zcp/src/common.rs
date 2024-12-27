@@ -1,8 +1,11 @@
+use std::env;
 use std::io::{self, Read};
 use std::net::Shutdown;
 use std::net::{Ipv4Addr, TcpStream};
 use std::str::from_utf8;
 
+pub const ADDR: Ipv4Addr = Ipv4Addr::new(192, 168, 50, 98);
+pub const PORT: u16 = 8000;
 pub const BUFFER_SIZE: usize = 1024;
 
 pub fn to_number(input: &str) -> u16 {
@@ -74,4 +77,13 @@ pub fn handle_stream_err(ts: &TcpStream) -> bool {
     );
     ts.shutdown(Shutdown::Both).unwrap();
     true
+}
+
+pub fn get_ip_port() -> (Ipv4Addr, u16) {
+    let args: Vec<String> = env::args().collect();
+    println!("args is {}, {}, {}", args[0], args[1], args[2]);
+    let ip: Ipv4Addr = to_ip(&args[1]);
+    let port = to_number(&args[2]);
+    println!("Hello from Server: {:?}:{:?}", ip, port);
+    (ip, port)
 }
