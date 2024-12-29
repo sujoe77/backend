@@ -1,6 +1,30 @@
-* Rust format string
+# Rust docs
 
-    https://doc.rust-lang.org/std/fmt/index.html
+    Rust examples   https://doc.rust-lang.org/rust-by-example/flow_control/while_let.html
+
+    Ruct book
+    
+        https://doc.rust-lang.org/book/ch04-00-understanding-ownership.html
+
+        https://doc.rust-lang.org/book/ch13-02-iterators.html
+
+        https://doc.rust-lang.org/book/ch19-05-advanced-functions-and-closures.html
+
+    Api doc
+    
+        https://doc.rust-lang.org/std/net/struct.TcpStream.html#impl-Read-for-%26TcpStream
+
+        https://doc.rust-lang.org/std/str/fn.from_utf8.html
+
+        https://doc.rust-lang.org/std/fmt/index.html
+
+    References  
+    
+        https://doc.rust-lang.org/reference/expressions/operator-expr.html
+
+        https://doc.rust-lang.org/reference/types/array.html
+
+# Other
 
 * vscode extensions
 

@@ -16,7 +16,7 @@ fn main() {
     for stream in listener.incoming() {
         match stream {
             Ok(stream) => {
-                println!("New connection: {}", stream.peer_addr().unwrap());
+                println!("New connection from: {}", stream.peer_addr().unwrap());
                 thread::spawn(move || read_stream(&stream, write_stream, |_s| {}));
             }
             Err(err) => println!("Connection failed due to {:?}", err),
