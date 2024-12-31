@@ -33,3 +33,15 @@
 * ? vs unwrap
 
     https://www.reddit.com/r/rust/comments/6astgn/what_are_the_rules_for_where_you_can_use_versus/
+
+* closure, function pointer
+
+    https://stackoverflow.com/questions/52696907/why-does-passing-a-closure-to-function-which-accepts-a-function-pointer-not-work
+
+* tokio
+
+  https://tokio.rs/
+
+* cargo profiles
+    
+    https://doc.rust-lang.org/cargo/reference/profiles.html
