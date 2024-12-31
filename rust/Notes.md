@@ -1,8 +1,10 @@
 # Rust docs
 
-    Rust examples   https://doc.rust-lang.org/rust-by-example/flow_control/while_let.html
+    Rust examples   
+    
+        https://doc.rust-lang.org/rust-by-example/flow_control/while_let.html
 
-    Ruct book
+    Rust book
     
         https://doc.rust-lang.org/book/ch04-00-understanding-ownership.html
 
