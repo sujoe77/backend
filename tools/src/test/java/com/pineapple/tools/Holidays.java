@@ -2,6 +2,8 @@ package com.pineapple.tools;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -21,7 +23,7 @@ public class Holidays {
             "2024-12-31"
     };
 
-    public static final Map.Entry[] MY_HOLIDAYS = new Map.Entry[] {
+    public static final List<Map.Entry<String, String>> MY_HOLIDAYS = List.of(
             Map.entry("2024-01-01", "2024-01-01"),
             Map.entry("2024-03-25", "2024-03-29"),
             Map.entry("2024-04-01", "2024-04-01"),
@@ -30,10 +32,9 @@ public class Holidays {
             Map.entry("2024-06-05", "2024-06-06"),
             Map.entry("2024-07-10", "2024-07-31"),
             Map.entry("2024-12-24", "2024-12-26"),
-            Map.entry("2024-12-31", "2024-12-31")
-    };
+            Map.entry("2024-12-31", "2024-12-31"));
 
-    public static final Map.Entry<Integer, Integer>[] MY_HOLIDAYS_INT = new Map.Entry[] {
+    public static final List<Map.Entry<Integer, Integer>> MY_HOLIDAYS_INT = List.of(
             Map.entry(1, 1),
             Map.entry(85, 89),
             Map.entry(92, 92),
@@ -42,8 +43,7 @@ public class Holidays {
             Map.entry(157, 158),
             Map.entry(192, 213),
             Map.entry(359, 361),
-            Map.entry(366, 366)
-    };
+            Map.entry(366, 366));
 
     public static final int[] MONTH_DAYS = new int[] {
             31, 29, 31, 30, 31, 30,
@@ -54,7 +54,7 @@ public class Holidays {
 
     @Test
     public void getWorkingDays() {
-        Map.Entry<Integer, Integer>[] workingDays = new Map.Entry[12];
+        List<Map.Entry<Integer, Integer>> workingDays = new ArrayList<>();
         for (int i = 0; i < MONTH_DAYS.length; i++) {
             int[] range = getMonthDayRange(i + 1);
             int count = 0;
@@ -63,7 +63,7 @@ public class Holidays {
                     count++;
                 }
             }
-            workingDays[i] = Map.entry(i, count);
+            workingDays.add(Map.entry(i, count));
             // System.out.println("range is: " + range[0] + ", " + range[1]);
             System.out.println("Month " + (i + 1) + ": " + count);
         }
@@ -73,10 +73,10 @@ public class Holidays {
     public void getMyHolidaysInt() {
         int index = 0;
         for (Map.Entry<String, String> entry : MY_HOLIDAYS) {
-            MY_HOLIDAYS_INT[index] = Map.entry(
+            MY_HOLIDAYS_INT.set(index, Map.entry(
                     getDayOfYear(entry.getKey()),
-                    getDayOfYear(entry.getValue()));
-            System.out.println(MY_HOLIDAYS_INT[index]);
+                    getDayOfYear(entry.getValue())));
+            System.out.println(MY_HOLIDAYS_INT.get(index));
             index++;
         }
     }
