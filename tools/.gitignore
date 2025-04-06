@@ -1,0 +1,15 @@
+# IntelliJ
+.idea/
+*.iml
+
+# Generated files:
+generated/
+
+# Gradle:
+.gradle/
+build/
+out/
+/**/*.bak
+src/test/java/temp
+FxApi
+/**/*.json
