@@ -73,9 +73,11 @@ public class Holidays {
     public void getMyHolidaysInt() {
         int index = 0;
         for (Map.Entry<String, String> entry : MY_HOLIDAYS) {
-            MY_HOLIDAYS_INT.set(index, Map.entry(
-                    getDayOfYear(entry.getKey()),
-                    getDayOfYear(entry.getValue())));
+            /*
+             * MY_HOLIDAYS_INT.set(index, Map.entry(
+             * getDayOfYear(entry.getKey()),
+             * getDayOfYear(entry.getValue())));
+             */
             System.out.println(MY_HOLIDAYS_INT.get(index));
             index++;
         }
