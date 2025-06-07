@@ -33,5 +33,5 @@ sed -i -e "s/\/root\/.oh-my-zsh/\/home\/$USERNAME\/.oh-my-zsh/g" /home/$USERNAME
 chown -R $USER_UID:$USER_GID /home/$USERNAME/.oh-my-zsh /home/$USERNAME/.zshrc
 
 ## git pull
-cd /workspaces/backend
-git pull
+#cd /workspaces/backend
+#git pull
