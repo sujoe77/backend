@@ -2,7 +2,7 @@
 resolver = "2"
 #see resolver at https://doc.rust-lang.org/cargo/reference/resolver.html
 
-members = ["minigrep",
+members = ["hello","minigrep",
     "my_rust_lab",
     "sujoe_lib",
     "zcp"
