@@ -1,7 +1,7 @@
 use std::{
     fs,
     io::{BufReader, prelude::*},
-    net::{TcpListener, TcpStream},    
+    net::{TcpListener, TcpStream},
 };
 
 use hello::ThreadPool;

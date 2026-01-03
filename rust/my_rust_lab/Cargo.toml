@@ -8,3 +8,15 @@ edition = "2018"
 
 [dependencies]
 sujoe_lib = {path = "../sujoe_lib"}
+
+[[bin]]
+name = "main"
+path = "src/main.rs"
+
+[[bin]]
+name = "threads1"
+path = "src/threads1.rs"
+
+[[bin]]
+name = "mutex1"
+path = "src/mutex1.rs"
